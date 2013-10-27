@@ -14,32 +14,25 @@ Node::Node(int key)
 void Node::random_insert(int val, Node* current)
 {
   // If the current node doesn't have any child, we put our node here
-  if(current->children->size() == 0){
-      cout << "on a pas de fils on add ici" << endl;
-     Node child(val);
-     current->children->push_back(child);
+  if(current->children.size() == 0){
+     Node * child = new Node(val);
+     current->children.push_back(child);
      return;
   }
 
-  cout << "on a un fils number of children" << current->children->size() << endl;
 
   // This number will be an integer between 1 and the number of children of our current node + 1
   // (because we can insert our node directly in the current node)
-  srand(time(NULL));
-  int randomNumber = rand() % (current->children->size() + 1);
-  cout << "On a passé le rand : " << randomNumber << endl;
+  int randomNumber = rand() % (current->children.size() + 1);
 
   // We need to subtract one to select the child number 0
   // We insert the node here
-  if(randomNumber == current->children->size()){
-      cout << "on insert ici meme a cause du rand" << endl;
-      Node child(val);
-      current->children->push_back(child);
+  if(randomNumber == current->children.size()){
+      Node * child = new Node(val);
+      current->children.push_back(child);
       return;
   }
-  cout << "on appel récursivement " << &current->children->at(randomNumber) << endl;
-
-  random_insert(val, &current->children->at(randomNumber));
+  random_insert(val, current->children.at(randomNumber));
 
 }
 
@@ -47,21 +40,47 @@ void Node::random_insert(int val, Node* current)
 
 Node* Node::generate_tree(int nb_vertices)
 {
+  // seed rand
+  srand(time(NULL));
 
-  Node root(0);
+  Node * root = new Node(0);
+  root->number_of_nodes = nb_vertices;
   for(int i=1; i<nb_vertices; i++){
-      cout << "insert" << i << endl;
-    random_insert(i, &root);
+    random_insert(i, root);
   }
-  return &root;
+  return root;
 }
 
-string Node::display_tree(){
-    string tree;
-    tree += this->children->size();
-    for (vector<Node>::iterator it = this->children->begin() ; it != this->children->end(); ++it){
-        cout << it->key_value << " : " ;
-        cout << '\n';
+int Node::get_key(){
+    return this->key_value;
+}
+
+int Node::get_number_of_nodes(){
+    return this->number_of_nodes;
+}
+
+void Node::display_tree(){
+    cout << this->get_number_of_nodes() << endl;
+    cout << this->get_key() << ": ";
+    for (vector<Node*>::iterator it = this->children.begin() ; it != this->children.end(); ++it){
+        cout << (*it)->get_key() << " ";
     }
-    return tree;
+    for (vector<Node*>::iterator it = this->children.begin() ; it != this->children.end(); ++it){
+        Node::display_subtree(*it);
+    }
+    cout << endl;
+}
+
+void Node::display_subtree(Node * subtree){
+    if (subtree->children.size() == 0){
+        return ;
+    }
+    cout << endl;
+    cout << subtree->get_key() << ": ";
+    for (vector<Node*>::iterator it = subtree->children.begin() ; it != subtree->children.end(); ++it){
+        cout << (*it)->get_key() << " ";
+    }
+    for (vector<Node*>::iterator it = subtree->children.begin() ; it != subtree->children.end(); ++it){
+        display_subtree(*it);
+    }
 }
