@@ -5,9 +5,15 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     Node.cpp \
-    Tree.cpp
+    Tree.cpp \
+    Utils.cpp \
+    Graph.cpp \
+    Vertex.cpp
 
 HEADERS += \
     Node.hpp \
-    Tree.hpp
+    Tree.hpp \
+    Utils.hpp \
+    Graph.hpp \
+    Vertex.hpp
 
