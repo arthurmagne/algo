@@ -2,12 +2,15 @@
 #define UTILS_HPP
 
 #include "Tree.hpp"
+#include "Graph.hpp"
+
 
 class Utils
 {
 public:
     Utils();
-    static void display(Tree * tree);
+    static void display_tree(Tree * tree);
+    static void display_graph(Graph * graph);
 
 };
 

@@ -11,6 +11,7 @@ class Node
 public:
   
   Node(int val);
+  ~Node();
   int get_key();
   int number_of_children();
   void add_child(Node* node);

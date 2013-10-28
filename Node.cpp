@@ -9,6 +9,10 @@ Node::Node(int key)
   key_value = key;
 }
 
+Node::~Node(){
+    //delete children;
+}
+
 int Node::get_key(){
     return this->key_value;
 }

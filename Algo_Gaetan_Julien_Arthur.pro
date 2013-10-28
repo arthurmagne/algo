@@ -8,12 +8,14 @@ SOURCES += main.cpp \
     Tree.cpp \
     Utils.cpp \
     Graph.cpp \
-    Vertex.cpp
+    Vertex.cpp \
+    Edge.cpp
 
 HEADERS += \
     Node.hpp \
     Tree.hpp \
     Utils.hpp \
     Graph.hpp \
-    Vertex.hpp
+    Vertex.hpp \
+    Edge.hpp
 
