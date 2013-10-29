@@ -3,6 +3,17 @@
 #include "Utils.hpp"
 #include "Node.hpp"
 #include "Graph.hpp"
+#include <fstream>
+#include <cstring>
+
+using std::cout;
+using std::endl;
+using std::ifstream;
+
+const int MAX_CHARS_PER_LINE = 512;
+const int MAX_TOKENS_PER_LINE = 20;
+const char* const DELIMITER = " ";
+
 
 Utils::Utils()
 {
@@ -25,5 +36,52 @@ void Utils::display_graph(Graph * graph){
             continue;
         cout << (*it)->get_key() << ": ";
         (*it)->display_neighbours();
+    }
+}
+
+Graph Utils::generate_graph_from_file(std::string filename){
+    std::vector<std::string> v;
+    ifstream fin;
+    fin.open(filename);
+    if (!fin.good())
+      return 1;
+
+    int loop = 0;
+    int nb_vertices = 0;
+
+    while (!fin.eof()){
+
+      char str[20];
+      fin.getline(str, 20);
+
+      if(loop++ == 0){
+        nb_vertices = str[0] - '0';
+        Graph g = new Graph();
+        for(int i = 0; i< nb_vertices; i++)
+            g->vertexes.push_back(new Vertex(i));
+      }
+
+      const char* line_token[10] = {};
+      line_token[0] = strtok(str, " :");
+
+      v.push_back(line_token[0]);
+      for(int i; i<v.size(); i++)
+          cout << v[i] << " ";
+         cout << endl;
+
+      if (line_token[0]){
+        for (int n = 1; n < 10; n++){
+          line_token[n] = strtok(0, " :");
+       if (!line_token[n])
+              break;
+       v.push_back(line_token[n]);
+
+       if(v.size()>1)
+         {
+           for(int j = 0; j<v.size(); j++)
+             g->edges.push_back(new Edge(v[0], v[j]));
+           }
+        }
+      }
     }
 }
