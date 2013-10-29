@@ -52,3 +52,35 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
     }
     return graph;
 }
+
+Graph* Graph::generate_bipartite_graph(int number_of_vertexes, double p){
+    // seed rand
+    srand(time(NULL));
+
+    Graph * graph = new Graph();
+    vector<Vertex*> partA;
+    vector<Vertex*> partB;
+
+    // we add all the vertexes in the structure
+    for (int i=0; i<number_of_vertexes ; i++){
+        Vertex * vertex = new Vertex(i);
+        graph->vertexes.push_back(vertex);
+        // we split our vertexes in two parts randomly
+        if ((rand() % 100) < 50)
+            partA.push_back(vertex);
+        else
+            partB.push_back(vertex);
+    }
+
+    // now, we create with a probability p some edges between vertexes in partA and partB
+    for (vector<Vertex*>::iterator partAVertex = partA.begin() ; partAVertex != partA.end(); ++partAVertex){
+        for (vector<Vertex*>::iterator partBVertex = partB.begin() ; partBVertex != partB.end(); ++partBVertex){
+            if ( (rand() % 100) < (p*100) ){
+                Edge * edge = new Edge(*partAVertex, *partBVertex);
+                graph->edges.push_back(edge);
+                (*partAVertex)->add_neighbour(*partBVertex);
+            }
+        }
+    }
+    return graph;
+}

@@ -11,6 +11,7 @@ public:
     Graph();
     ~Graph();
     static Graph * generate_graph(int number_of_vertexes, double p);
+    static Graph * generate_bipartite_graph(int number_of_vertexes, double p);
     int get_number_of_vertexes();
     vector<Vertex*>::iterator get_iterator_begin();
     vector<Vertex*>::iterator get_iterator_end();

@@ -17,5 +17,10 @@ int main()
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(graph);
 
+    Graph * bipartite_graph = Graph::generate_bipartite_graph(10, 0.25);
+    cout << endl << "On génère un graphe biparti à " << bipartite_graph->get_number_of_vertexes() << " sommets." << endl;
+    cout << "La liste d'adjacences obtenue est la suivante: " << endl;
+    Utils::display_graph(bipartite_graph);
+
     return 0;
 }
