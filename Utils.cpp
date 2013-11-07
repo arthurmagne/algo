@@ -34,6 +34,7 @@ void Utils::display_graph(Graph * graph){
     }
 }
 
+/*
 Graph Utils::generate_graph_from_file(std::string filename){
     std::vector<std::string> v;
     ifstream fin;
@@ -79,4 +80,4 @@ Graph Utils::generate_graph_from_file(std::string filename){
         }
       }
     }
-}
+}*/
