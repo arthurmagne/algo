@@ -1,7 +1,7 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-#include <vector>
+#include <set>
 
 using namespace std;
 
@@ -14,12 +14,12 @@ public:
     int get_number_of_neighbours();
     void add_neighbour(Vertex * vertex);
     void display_neighbours();
-    vector<Vertex *>& get_neighbours();
+    set<Vertex *>& get_neighbours();
 
 
 private:
     int key_value;
-    vector<Vertex *> neighbours;
+    set<Vertex *> neighbours;
 };
 
 #endif // VERTEX_HPP

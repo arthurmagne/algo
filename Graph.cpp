@@ -26,7 +26,7 @@ vector<Vertex*>::iterator  Graph::get_iterator_end(){
     return this->vertexes.end();
 }
 
-vector<Vertex *> Graph::get_vertexes_copy(){
+vector<Vertex *> &Graph::get_vertexes_copy(){
     return this->vertexes;
 }
 
@@ -136,6 +136,7 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
                     graph->edges.push_back(edge);
                     (*current)->add_neighbour(*it);
                     (*it)->add_neighbour(*current);
+
                 }
             }
         }

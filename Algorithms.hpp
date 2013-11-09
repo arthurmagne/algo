@@ -10,7 +10,7 @@ class Algorithms
 {
 public:
     Algorithms();
-    static vector<Vertex*> greedy_algorithm(Graph *any_graph);
+    static set<Vertex *> greedy_algorithm(Graph *any_graph);
 };
 
 #endif // ALGORITHMS_HPP
