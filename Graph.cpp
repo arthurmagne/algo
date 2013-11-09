@@ -57,6 +57,7 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
                     Edge * edge = new Edge(*current, *it);
                     graph->edges.push_back(edge);
                     (*current)->add_neighbour(*it);
+                    (*it)->add_neighbour(*current);
                 }
             }
         }
@@ -90,6 +91,7 @@ Graph* Graph::generate_bipartite_graph(int number_of_vertexes, double p){
                 Edge * edge = new Edge(*partAVertex, *partBVertex);
                 graph->edges.push_back(edge);
                 (*partAVertex)->add_neighbour(*partBVertex);
+                (*partBVertex)->add_neighbour(*partAVertex);
             }
         }
     }
@@ -133,6 +135,7 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
                     Edge * edge = new Edge(*current, *it);
                     graph->edges.push_back(edge);
                     (*current)->add_neighbour(*it);
+                    (*it)->add_neighbour(*current);
                 }
             }
         }

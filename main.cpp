@@ -23,7 +23,7 @@ int main()
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(bipartite_graph);
 
-    Graph * graph_with_cover = Graph::generate_graph_with_min_cover(10, 5, 0.25);
+    Graph * graph_with_cover = Graph::generate_graph_with_min_cover(9, 5, 0.25);
     cout << endl << "On génère un graphe avec une couverture de taille 5 à " << graph_with_cover->get_number_of_vertexes() << " sommets." << endl;
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(graph_with_cover);
