@@ -26,6 +26,16 @@ vector<Vertex*>::iterator  Graph::get_iterator_end(){
     return this->vertexes.end();
 }
 
+vector<Vertex *> Graph::get_vertexes_copy(){
+    return this->vertexes;
+}
+
+vector<Edge *> Graph::get_edges_copy(){
+    return this->edges;
+}
+
+
+/* Generation functions */
 
 Graph* Graph::generate_graph(int number_of_vertexes, double p){
     // seed rand

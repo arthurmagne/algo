@@ -4,6 +4,8 @@
 #include <vector>
 #include "Vertex.hpp"
 #include "Edge.hpp"
+#include <set>
+#include <map>
 
 class Graph
 {
@@ -16,6 +18,9 @@ public:
     int get_number_of_vertexes();
     vector<Vertex*>::iterator get_iterator_begin();
     vector<Vertex*>::iterator get_iterator_end();
+    vector<Vertex *> get_vertexes_copy();
+    vector<Edge *> get_edges_copy();
+
 
 private:
     vector<Vertex *> vertexes;

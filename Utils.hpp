@@ -3,6 +3,10 @@
 
 #include "Tree.hpp"
 #include "Graph.hpp"
+#include "Node.hpp"
+#include "Vertex.hpp"
+#include <fstream>
+#include <cstring>
 
 
 class Utils

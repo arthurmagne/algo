@@ -9,7 +9,8 @@ SOURCES += main.cpp \
     Utils.cpp \
     Graph.cpp \
     Vertex.cpp \
-    Edge.cpp
+    Edge.cpp \
+    Algorithms.cpp
 
 HEADERS += \
     Node.hpp \
@@ -17,5 +18,6 @@ HEADERS += \
     Utils.hpp \
     Graph.hpp \
     Vertex.hpp \
-    Edge.hpp
+    Edge.hpp \
+    Algorithms.hpp
 

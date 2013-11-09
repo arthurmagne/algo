@@ -23,6 +23,10 @@ void Vertex::add_neighbour(Vertex * vertex){
     this->neighbours.push_back(vertex);
 }
 
+vector<Vertex *> Vertex::get_neighbours(){
+    return this->neighbours;
+}
+
 void Vertex::display_neighbours(){
     for (vector<Vertex*>::iterator it = this->neighbours.begin() ; it != this->neighbours.end(); ++it)
         cout << (*it)->get_key() << " ";

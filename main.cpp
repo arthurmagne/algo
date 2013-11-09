@@ -2,6 +2,7 @@
 #include "Tree.hpp"
 #include "Utils.hpp"
 #include "Graph.hpp"
+#include "Algorithms.hpp"
 
 using namespace std;
 
@@ -27,5 +28,10 @@ int main()
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(graph_with_cover);
 
-    return 0;
+    /* Algo */
+    vector<Vertex*> cover = Algorithms::greedy_algorithm(graph_with_cover);
+    for (vector<Vertex*>::iterator it = cover.begin() ; it != cover.end(); ++it){
+        cout << (*it)->get_key() ;
+    }
+    cout << endl;
 }

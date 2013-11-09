@@ -14,6 +14,7 @@ public:
     int get_number_of_neighbours();
     void add_neighbour(Vertex * vertex);
     void display_neighbours();
+    vector<Vertex *> get_neighbours();
 
 
 private:
