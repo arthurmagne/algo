@@ -167,7 +167,7 @@ Graph* Graph::get_graph_copy(){
 
 
 Graph * Graph::generate_graph_from_file(char* filename){
-    cout << "ee";
+    cout << endl << " TOTO "<< endl;
     int num_vert=0;
     vector<char *> v;
     ifstream fin;
@@ -192,7 +192,7 @@ Graph * Graph::generate_graph_from_file(char* filename){
             ver.push_back(new Vertex(i+1));
       }
       /** Deuxieme tour de boucle on récupère la ligne d'adjacence ligne par ligne*/
-      if(loop>1){
+      if(loop>1){ // loop>=1 ?
       char* line_token[10] = {};
       line_token[0] = strtok(str, " :");
       v.push_back(line_token[0]);
