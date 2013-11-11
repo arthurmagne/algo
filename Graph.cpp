@@ -1,7 +1,15 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <cstring>
 #include "Graph.hpp"
+
+using std::cout;
+using std::endl;
+using std::ifstream;
 
 using namespace std;
 
