@@ -42,5 +42,7 @@ int main()
         cout << (*it)->get_key() ;
     }
 
+    Graph * g = Graph::generate_graph_from_file("file");
+    Utils::display_graph(g);
     cout << endl;
 }
