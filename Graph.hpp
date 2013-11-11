@@ -20,6 +20,8 @@ public:
     vector<Vertex*>::iterator get_iterator_end();
     vector<Vertex *>& get_vertexes_copy();
     vector<Edge *> get_edges_copy();
+    Graph* get_graph_copy();
+
 
 
 private:

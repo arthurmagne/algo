@@ -10,7 +10,8 @@ class Algorithms
 {
 public:
     Algorithms();
-    static set<Vertex *> greedy_algorithm(Graph *any_graph);
+    static set<Vertex *> two_aprox_algorithm(Graph *any_graph);
+    static set<Vertex*> greedy_algorithm(Graph *any_graph);
 };
 
 #endif // ALGORITHMS_HPP

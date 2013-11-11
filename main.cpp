@@ -24,14 +24,23 @@ int main()
     Utils::display_graph(bipartite_graph);
 
     Graph * graph_with_cover = Graph::generate_graph_with_min_cover(10, 4, 0.25);
-    cout << endl << "On génère un graphe avec une couverture de taille 5 à " << graph_with_cover->get_number_of_vertexes() << " sommets." << endl;
+    cout << endl << "On génère un graphe avec une couverture de taille 4 à " << graph_with_cover->get_number_of_vertexes() << " sommets." << endl;
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(graph_with_cover);
 
     /* Algo */
-    set<Vertex*> cover = Algorithms::greedy_algorithm(graph_with_cover);
+    cout << endl << "Greedy algorithm: " << endl;
+    set<Vertex*> greedy_cover = Algorithms::greedy_algorithm(graph_with_cover);
+    for (set<Vertex*>::iterator it = greedy_cover.begin() ; it != greedy_cover.end(); ++it){
+        cout << (*it)->get_key() ;
+    }
+
+    Graph * graph_with_cover_2 = Graph::generate_graph_with_min_cover(10, 4, 0.25);
+    cout << endl << "2-aprox algorithm: " << endl;
+    set<Vertex*> cover = Algorithms::two_aprox_algorithm(graph_with_cover_2);
     for (set<Vertex*>::iterator it = cover.begin() ; it != cover.end(); ++it){
         cout << (*it)->get_key() ;
     }
+
     cout << endl;
 }

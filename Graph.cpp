@@ -146,3 +146,13 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
     return graph;
 }
 
+Graph* Graph::get_graph_copy(){
+    Graph* graph_copy = new Graph();
+
+    vector<Vertex*> vertexes_copy(this->vertexes);
+    vector<Edge*> edges_copy(this->edges);
+
+    graph_copy->vertexes = vertexes_copy;
+    graph_copy->edges = edges_copy;
+    return graph_copy;
+}
