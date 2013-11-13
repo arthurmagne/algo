@@ -41,8 +41,10 @@ int main()
     for (set<Vertex*>::iterator it = cover.begin() ; it != cover.end(); ++it){
         cout << (*it)->get_key() ;
     }
-
-    Graph * g = Graph::generate_graph_from_file("file");
+    cout << endl;
+    cout << endl << "Génération d'un graphe à partir d'un fichier contenant une liste d'adjacence' " << endl;
+    cout << "La liste d'adjacences obtenue est la suivante: " << endl;
+    Graph * g = Graph::generate_graph_from_file("../../../Documents/CAA/algo/file");
     Utils::display_graph(g);
     cout << endl;
 }
