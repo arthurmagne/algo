@@ -167,59 +167,70 @@ Graph* Graph::get_graph_copy(){
 
 
 Graph * Graph::generate_graph_from_file(char* filename){
-    cout << endl << " TOTO "<< endl;
     int num_vert=0;
     vector<char *> v;
     ifstream fin;
-    fin.open(filename);
+    fin.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
+    //if(fin.is_open())
+       // cout << "File Open" << endl;
     Graph * g = new Graph();
     vector<Vertex *> ver;
     vector<Edge *> e;
     int size = 0;
     int loop = 0;
     int nb_vertices = 0;
-    cout << "ee";
     /** Chaque tour de boucle correspond à une ligne du document texte contenant la liste d'adjacence*/
     while (!fin.eof()){
       char str[20];
       fin.getline(str, 20);
       /** Premier tour de boucle, on recupere le nombre de sommets*/
       if(loop++ == 0){
-        fin.getline(str, 20);
+       // fin.getline(str, 20);
         nb_vertices = str[0] - '0';
+       // cout << "nb vertices ";
+       // cout << nb_vertices << endl;
       /** On cree les sommets du graphe*/
         for(int i = 0; i< nb_vertices; i++)
             ver.push_back(new Vertex(i+1));
+       // for(int i = 0; i< ver.size(); i++)
+          //  cout<<"sommet "<< i+1 <<" "<<ver[i]<<endl;
       }
-      /** Deuxieme tour de boucle on récupère la ligne d'adjacence ligne par ligne*/
-      if(loop>1){ // loop>=1 ?
-      char* line_token[10] = {};
-      line_token[0] = strtok(str, " :");
-      v.push_back(line_token[0]);
-      if (line_token[0]){
-        for (int n = 1; n < 10; n++){
-          line_token[n] = strtok(0, " :");
-          if (!line_token[n])
-              break;
-          v.push_back(line_token[n]);
+      /** Deuxieme tour de boucle on récupère la liste d'adjacence ligne par ligne*/
+      if(loop>1 && loop<4){ // loop>=1 ?
+
+          char* line_token[10] = {};
+          line_token[0] = strtok(str, " :");
+          v.push_back(line_token[0]);
+        //  cout<<"v[0]="<<v[0]<<endl;
+          if (line_token[0]){
+           //  cout<< "TOTO 7"<<endl;
+             for (int n = 1; n < 10; n++){
+                line_token[n] = strtok(0, " :");
+                if (!line_token[n])
+                  break;
+                v.push_back(line_token[n]);
         }
+
+           // cout << "v[1]="<< v[1] <<endl;
       }
-      }
+
     /** Pour chaque ligne, on crée les arretes correspondantes et on ajoute les voisins au sommet*/
       if(v.size()>1)
          {
+
              for(int j =1+size; j<v.size(); j++){
                  string sv;
                  if(v[j] != NULL)
                     sv = v[j];
                  int nb = atoi(sv.c_str());
-                 e.push_back(new Edge(ver[num_vert], ver[nb]));
-                 ver[num_vert]->add_neighbour(ver[nb]);
+                 e.push_back(new Edge(ver[num_vert], ver[nb-1]));
+                 ver[num_vert]->add_neighbour(ver[nb-1]);
              }
            }
       size = v.size();
-      cout << (ver[num_vert])->get_number_of_neighbours();
+     // cout << (ver[num_vert])->get_number_of_neighbours();
       num_vert++;
+    }
 }
     /** On affecte les sommets et arretes au graphe*/
     g->edges = e;
