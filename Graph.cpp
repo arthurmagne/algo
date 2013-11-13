@@ -172,13 +172,13 @@ Graph * Graph::generate_graph_from_file(char* filename){
     vector<char *> v;
     ifstream fin;
     fin.open(filename);
+
     Graph * g = new Graph();
     vector<Vertex *> ver;
     vector<Edge *> e;
     int size = 0;
     int loop = 0;
     int nb_vertices = 0;
-    cout << "ee";
     /** Chaque tour de boucle correspond à une ligne du document texte contenant la liste d'adjacence*/
     while (!fin.eof()){
       char str[20];
@@ -192,18 +192,18 @@ Graph * Graph::generate_graph_from_file(char* filename){
             ver.push_back(new Vertex(i+1));
       }
       /** Deuxieme tour de boucle on récupère la ligne d'adjacence ligne par ligne*/
-      if(loop>1){ // loop>=1 ?
-      char* line_token[10] = {};
-      line_token[0] = strtok(str, " :");
-      v.push_back(line_token[0]);
-      if (line_token[0]){
-        for (int n = 1; n < 10; n++){
-          line_token[n] = strtok(0, " :");
-          if (!line_token[n])
-              break;
-          v.push_back(line_token[n]);
-        }
-      }
+      if(loop>=1){ // loop>=1 ?
+          char* line_token[10] = {};
+          line_token[0] = strtok(str, " :");
+          v.push_back(line_token[0]);
+          if (line_token[0]){
+            for (int n = 1; n < 10; n++){
+              line_token[n] = strtok(0, " :");
+              if (!line_token[n])
+                  break;
+              v.push_back(line_token[n]);
+            }
+         }
       }
     /** Pour chaque ligne, on crée les arretes correspondantes et on ajoute les voisins au sommet*/
       if(v.size()>1)
@@ -217,6 +217,7 @@ Graph * Graph::generate_graph_from_file(char* filename){
                  ver[num_vert]->add_neighbour(ver[nb]);
              }
            }
+
       size = v.size();
       cout << (ver[num_vert])->get_number_of_neighbours();
       num_vert++;
