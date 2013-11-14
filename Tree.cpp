@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Tree.hpp"
+#include <cstdlib>
 
 using namespace std;
 
