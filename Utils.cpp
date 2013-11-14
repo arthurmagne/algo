@@ -42,8 +42,14 @@ void Utils::detect_cycle(char* filename){
     fin.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
     char str[20];
     fin.getline(str, 20);
+    char* line_token[10] = {};
+    line_token[0] = strtok(str, " :");
+    int nb_loop = atoi(line_token[0]);
+    cout << nb_loop <<endl;
+    int loop = 0;
 
-    while (!fin.eof()){
+
+    while (loop++<nb_loop){
         cout << "ON COMMENCE" << endl;
       fin.getline(str, 20);
 
@@ -53,7 +59,6 @@ void Utils::detect_cycle(char* filename){
       char* line_token[10] = {};
       line_token[0] = strtok(str, " :");
       l.push_back(atoi(line_token[0]));
-      cout << "CACA" << endl;
 
       if (line_token[0]){
          for (int n = 1; n < 10; n++){
@@ -69,10 +74,10 @@ void Utils::detect_cycle(char* filename){
          cout << l[i] << endl;
 
     adj_list.push_back(l);
-    cout << adj_list.size() <<endl;
+   // cout << adj_list.size() <<endl;
     }
-    cout<< "toto" << endl;
-    cout << adj_list.size() <<endl;
+   // cout<< "toto" << endl;
+   // cout << adj_list.size() <<endl;
   //  for(int j=0; j<adj_list.size(); j++)
      //for(int i=0; i<adj_list[j].size(); i++){
       //   cout << adj_list[i][j] << endl;
