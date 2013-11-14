@@ -3,6 +3,7 @@
 
 #include "Node.hpp"
 #include "TreeEdge.hpp"
+#include <vector>
 
 class Tree
 {
