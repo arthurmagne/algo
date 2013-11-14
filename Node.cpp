@@ -22,11 +22,23 @@ int Node::number_of_children(){
 }
 
 void Node::add_child(Node* node){
-    this->children.push_back(node);
+    this->children.insert(node);
+}
+
+set<Node *> &Node::get_children(){
+    return this->children;
+}
+
+Node* Node::get_parent(){
+    return this->parent;
+}
+
+void Node::set_parent(Node* parent){
+    this->parent = parent;
 }
 
 void Node::display_children(){
-    for (vector<Node*>::iterator it = this->children.begin() ; it != this->children.end(); ++it)
+    for (set<Node*>::iterator it = this->children.begin() ; it != this->children.end(); ++it)
         cout << (*it)->get_key() << " ";
     cout << endl;
 }

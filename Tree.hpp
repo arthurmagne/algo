@@ -2,6 +2,8 @@
 #define TREE_HPP
 
 #include "Node.hpp"
+#include "TreeEdge.hpp"
+#include <vector>
 
 class Tree
 {
@@ -19,6 +21,7 @@ public:
 private:
     Node* root;
     vector<Node *> nodes;
+    vector<TreeEdge *> edges;
 };
 
 #endif // TREE_HPP

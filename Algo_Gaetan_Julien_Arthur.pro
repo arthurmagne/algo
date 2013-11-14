@@ -10,14 +10,16 @@ SOURCES += main.cpp \
     Graph.cpp \
     Vertex.cpp \
     Edge.cpp \
-    Algorithms.cpp
+    Algorithms.cpp \
+    TreeEdge.cpp
 
 HEADERS += \
     Node.hpp \
-    Tree.hpp \
     Utils.hpp \
     Graph.hpp \
     Vertex.hpp \
     Edge.hpp \
-    Algorithms.hpp
+    Algorithms.hpp \
+    Tree.hpp \
+    TreeEdge.hpp
 

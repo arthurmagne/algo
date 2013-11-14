@@ -1,7 +1,7 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <vector>
+#include <set>
 
 using namespace std;
 
@@ -16,11 +16,15 @@ public:
   int number_of_children();
   void add_child(Node* node);
   void display_children();
+  void set_parent(Node* parent);
+  set<Node *>& get_children();
+  Node *get_parent();
 
 
 private:
   int key_value;
-  vector<Node *> children;
+  set<Node *> children;
+  Node* parent;
   
 
 };

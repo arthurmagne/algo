@@ -16,43 +16,20 @@ Tree::~Tree(){
     //delete nodes;
 }
 
-// Old way (too many nodes at the top of the tree)
-/*
-void Node::random_insert(Node* leaf)
-{
-  // If the current node doesn't have any child, we put our node here
-  if(leaf->children.size() == 0){
-     Node * child = new Node(val);
-     leaf->children.push_back(child);
-     return;
-  }
-
-
-  // This number will be an integer between 1 and the number of children of our current node + 1
-  // (because we can insert our node directly in the current node)
-  int randomNumber = rand() % (leaf->children.size() + 1);
-
-  // We need to subtract one to select the child number 0
-  // We insert the node here
-  if(randomNumber == leaf->children.size()){
-      Node * child = new Node(val);
-      leaf->children.push_back(child);
-      return;
-  }
-  random_insert(val, leaf->children.at(randomNumber));
-
-}*/
-
-
 void Tree::random_insert(Node* leaf)
 {
-    if (this->nodes.size() == 0)
+    if (this->nodes.size() == 0){
         this->nodes.at(0)->add_child(leaf);
+        return ;
+    }
 
-  // We choose a random node in all the nodes already in the tree and we put our new node into his list of children
-  int randomNumber = rand() % this->nodes.size();
+    // We choose a random node in all the nodes already in the tree and we put our new node into his list of children
+    int randomNumber = rand() % this->nodes.size();
+    leaf->set_parent(this->nodes.at(randomNumber));
+    TreeEdge* edge = new TreeEdge(this->nodes.at(randomNumber), leaf);
+    this->edges.push_back(edge);
 
-  this->nodes.at(randomNumber)->add_child(leaf);
+    this->nodes.at(randomNumber)->add_child(leaf);
 }
 
 
@@ -110,5 +87,33 @@ void Tree::display_subtree(Node * subtree){
         display_subtree(*it);
     }
 }
-*/
+
+
+// Old way (too many nodes at the top of the tree)
+
+void Node::random_insert(Node* leaf)
+{
+  // If the current node doesn't have any child, we put our node here
+  if(leaf->children.size() == 0){
+     Node * child = new Node(val);
+     leaf->children.push_back(child);
+     return;
+  }
+
+
+  // This number will be an integer between 1 and the number of children of our current node + 1
+  // (because we can insert our node directly in the current node)
+  int randomNumber = rand() % (leaf->children.size() + 1);
+
+  // We need to subtract one to select the child number 0
+  // We insert the node here
+  if(randomNumber == leaf->children.size()){
+      Node * child = new Node(val);
+      leaf->children.push_back(child);
+      return;
+  }
+  random_insert(val, leaf->children.at(randomNumber));
+
+}*/
+
 
