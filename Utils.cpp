@@ -34,7 +34,7 @@ void Utils::display_graph(Graph * graph){
     }
 }
 
-void Utils::detect_cycle(char* filename){
+bool Utils::detect_cycle(char* filename){
 
     std::vector< std::vector<int> > adj_list;
 
@@ -45,16 +45,16 @@ void Utils::detect_cycle(char* filename){
     char* line_token[10] = {};
     line_token[0] = strtok(str, " :");
     int nb_loop = atoi(line_token[0]);
-    cout << nb_loop <<endl;
+
+    int matA[nb_loop][nb_loop];
+    int matB[nb_loop][nb_loop];
+    int matC[nb_loop][nb_loop];
+
     int loop = 0;
 
-
     while (loop++<nb_loop){
-        cout << "ON COMMENCE" << endl;
       fin.getline(str, 20);
-
       std::vector<int> l;
-
 
       char* line_token[10] = {};
       line_token[0] = strtok(str, " :");
@@ -66,28 +66,45 @@ void Utils::detect_cycle(char* filename){
             if (!line_token[n])
               break;
             l.push_back(atoi(line_token[n]));
+
          }
+         adj_list.push_back(l);
+      }
+    }
+
+      for(int i=0; i<nb_loop; i++)
+        for(int j=0; j<nb_loop; j++)
+            matA[i][j] = 0;
+
+      for(int i=0; i<adj_list.size(); i++){
+          int s = adj_list[i][0];
+          for(int j=1; j<adj_list[i].size(); j++)
+              matA[s-1][(adj_list[i][j]) - 1] = 1;
       }
 
-      cout << "tour de boucle" <<endl;
-      for(int i=0; i<l.size(); i++)
-         cout << l[i] << endl;
+      for(int i=0; i<nb_loop; i++)
+          for(int j=0; j<nb_loop; j++){
+              matB[i][j] = matA[i][j];
+              matC[i][j] = 0;
+          }
 
-    adj_list.push_back(l);
-   // cout << adj_list.size() <<endl;
+      for(int n=0; n<=nb_loop; n++){
+          for(int i=0; i<nb_loop; i++)
+              for(int j=0; j<nb_loop; j++){
+                  matC[i][j] = 0;
+                  for(int k=0; k<nb_loop; k++)
+                      matC[i][j] = matA[i][k] * matB[k][j] + matC[i][j];
+              }
+
+          for(int i=0; i<nb_loop; i++)
+              for(int j=0; j<nb_loop; j++)
+                  matB[i][j] = matC[i][j];
+
+          for(int i=0; i<nb_loop; i++)
+              if((matC[i][i] != 0) && n > 2)
+                  return true;
+              }
+
+      return false;
     }
-   // cout<< "toto" << endl;
-   // cout << adj_list.size() <<endl;
-  //  for(int j=0; j<adj_list.size(); j++)
-     //for(int i=0; i<adj_list[j].size(); i++){
-      //   cout << adj_list[i][j] << endl;
-    }
-
-
-
-
-
-
-
-
 

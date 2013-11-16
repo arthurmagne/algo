@@ -169,7 +169,8 @@ Graph* Graph::get_graph_copy(){
 
 Graph * Graph::generate_graph_from_file(char* filename){
 
-    Utils::detect_cycle(filename);
+    if(Utils::detect_cycle(filename))
+        cout << "cycle" <<endl;
 
     int num_vert=0;
     vector<char *> v;
