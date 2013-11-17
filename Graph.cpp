@@ -169,8 +169,8 @@ Graph* Graph::get_graph_copy(){
 
 Graph * Graph::generate_graph_from_file(char* filename){
 
-    if(Utils::detect_cycle(filename))
-        cout << "cycle" <<endl;
+   // if(Utils::detect_cycle(filename))
+     //   cout << "cycle" <<endl;
 
     int num_vert=0;
     vector<char *> v;
@@ -193,7 +193,7 @@ Graph * Graph::generate_graph_from_file(char* filename){
         nb_vertices = atoi(line_token[0]);
       /** On cree les sommets du graphe*/
         for(int i = 0; i< nb_vertices; i++)
-            ver.push_back(new Vertex(i+1));
+            ver.push_back(new Vertex(i));
       }
 
       /** Deuxieme tour de boucle on récupère la liste d'adjacence ligne par ligne*/
@@ -218,8 +218,8 @@ Graph * Graph::generate_graph_from_file(char* filename){
                  if(v[j] != NULL)
                     sv = v[j];
                  int nb = atoi(sv.c_str());
-                 e.push_back(new Edge(ver[num_vert], ver[nb-1]));
-                 ver[num_vert]->add_neighbour(ver[nb-1]);
+                 e.push_back(new Edge(ver[num_vert], ver[nb]));
+                 ver[num_vert]->add_neighbour(ver[nb]);
              }
            }
 

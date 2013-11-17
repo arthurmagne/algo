@@ -79,7 +79,7 @@ bool Utils::detect_cycle(char* filename){
       for(int i=0; i<adj_list.size(); i++){
           int s = adj_list[i][0];
           for(int j=1; j<adj_list[i].size(); j++)
-              matA[s-1][(adj_list[i][j]) - 1] = 1;
+              matA[s][(adj_list[i][j])] = 1;
       }
 
       for(int i=0; i<nb_loop; i++)

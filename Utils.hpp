@@ -16,7 +16,6 @@ public:
     static void display_tree(Tree * tree);
     static void display_graph(Graph * graph);
     static bool detect_cycle(char* filename);
-    static bool search_cycle(int iteration, int start, int next, std::vector< std::vector<int> > adj_list);
 
 
 };
