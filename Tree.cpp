@@ -59,6 +59,22 @@ vector<Node*>::iterator  Tree::get_iterator_end(){
     return this->nodes.end();
 }
 
+vector<Node*> & Tree::get_nodes(){
+
+    return this->nodes;
+}
+
+bool Tree::exist_edge(Tree t){
+    if (t.get_edges().size()==0)
+        return false;
+    return true;
+
+}
+
+vector<TreeEdge*> Tree::get_edges(){
+    return this->edges;
+}
+
 // Old way
 /*
 void Tree::display_tree(){
