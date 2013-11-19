@@ -16,6 +16,9 @@ public:
     int get_number_of_nodes();
     vector<Node*>::iterator get_iterator_begin();
     vector<Node*>::iterator get_iterator_end();
+    vector<Node*> & get_nodes();
+    bool exist_edge(Tree t);
+    vector<TreeEdge*> get_edges();
 
 
 private:

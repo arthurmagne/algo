@@ -102,3 +102,98 @@ set<Vertex*> Algorithms::greedy_algorithm(Graph *any_graph){
     return cover;
 }
 
+set<Node*> Algorithms::optimal_tree(Tree *any_tree){
+    //On mélange la liste des sommets
+    set<Node*> cover;
+    // seed rand
+    srand(time(NULL));
+    vector<Node*> nodes= any_tree->get_nodes();
+    random_shuffle(nodes.begin(),nodes.end());
+    int i=0;
+    while (i<10){
+
+        Node* current = nodes.at(i);
+        //On cherche une feuille
+        while (current->number_of_children()!=0){
+            current=(*current->get_children().begin());
+        }
+        //On marque le père
+        if(current->get_parent()!=NULL){
+            current=current->get_parent();
+            cover.insert(current);
+
+             //On supprime les arretes fils-père
+             for (set<Node*>::iterator it = current->get_children().begin() ; it != current->get_children().end(); ++it){
+
+                 (*it)->set_parent(NULL);
+              }
+              //On supprime les arretes pere-fils
+             current->get_children().clear();
+
+             //On supprime l'arrete pere-"grandpere"
+             if(current->get_parent()!=NULL){
+                  Node* current_father = current->get_parent();
+                 current->set_parent(NULL);
+                  current_father->get_children().erase(current_father);
+              }
+        }
+        i++;
+
+
+
+    }
+
+    return cover;
+}
+
+/*set<Node*> Algorithms::optimal_tree(Tree *any_tree){
+    //On mélange la liste des sommets
+    set<Node*> cover;
+    vector<TreeEdge*> e;
+    // seed rand
+    srand(time(NULL));
+    vector<Node*> nodes= any_tree->get_nodes();
+    random_shuffle(nodes.begin(),nodes.end());
+    int i=0;
+   // while (!e==any_tree->get_edges()){
+
+        Node* current = nodes.at(i);
+        //On cherche une feuille
+        while (current->number_of_children()!=0){
+            current=(*current->get_children().begin());
+        }
+        //On marque le père
+        if(current->get_parent()!=NULL){
+            current=current->get_parent();
+            cover.insert(current);
+
+             //On supprime les arretes fils-père
+             for (set<Node*>::iterator it = current->get_children().begin() ; it != current->get_children().end(); ++it){
+
+                 TreeEdge* tmp = new TreeEdge(current, (*it));
+                 e.push_back(tmp);
+                 (*it)->set_parent(NULL);
+              }
+              //On supprime les arretes pere-fils
+             current->get_children().clear();
+
+             //On supprime l'arrete pere-"grandpere"
+             if(current->get_parent()!=NULL){
+                 TreeEdge* tmp = new TreeEdge(current, current->get_parent());
+                 e.push_back(tmp);
+                  Node* current_father = current->get_parent();
+                 current->set_parent(NULL);
+                  current_father->get_children().erase(current_father);
+              }
+        }
+        i++;
+
+
+
+    }
+
+    return cover;
+}*/
+
+
+
