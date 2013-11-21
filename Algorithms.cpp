@@ -109,10 +109,17 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
     srand(time(NULL));
     vector<Node*> nodes= any_tree->get_nodes();
     random_shuffle(nodes.begin(),nodes.end());
-    int i=0;
-    while (i<10){
+    vector<Node*>::iterator iter = nodes.begin();
+    while (iter != nodes.end()){
+        //trouver un moyen de trouver un noeud au hazard (avec des fils)
+        // pour ça on à mélangé les noeuds, on les parcours, on regarde si le noeud à des fils sinon on le passe
+        // semble fonctionner
+        if (((*iter)->number_of_children()==0) && ((*iter)->get_parent()==NULL)){
+            iter++;
+            continue;
+        }
 
-        Node* current = nodes.at(i);
+        Node* current = *iter;
         //On cherche une feuille
         while (current->number_of_children()!=0){
             current=(*current->get_children().begin());
@@ -133,14 +140,11 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
              //On supprime l'arrete pere-"grandpere"
              if(current->get_parent()!=NULL){
                   Node* current_father = current->get_parent();
-                 current->set_parent(NULL);
+                  current->set_parent(NULL);
                   current_father->get_children().erase(current_father);
               }
         }
-        i++;
-
-
-
+        iter++;
     }
 
     return cover;
