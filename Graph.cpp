@@ -74,6 +74,33 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
     return graph;
 }
 
+// !!! This function don't copy the edges !!!
+Graph* Graph::get_graph_copy(){
+    Graph* graph_copy = new Graph();
+
+    vector<Edge*> edges;
+
+    // we add all the vertexes in the structure
+    for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
+        Vertex * vertex = new Vertex((*current)->get_key());
+        graph_copy->vertexes.push_back(vertex);
+    }
+    // we add the neighbours and create the edges
+    for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
+        if ((*current)->get_number_of_neighbours() != 0){
+            set<Vertex*> neigh;
+            for (set<Vertex*>::iterator it = (*current)->get_neighbours().begin() ; it != (*current)->get_neighbours().end(); ++it){
+                // we find the good vertex
+                neigh.insert(graph_copy->vertexes.at((*it)->get_key()));
+            }
+            ((Vertex*)graph_copy->vertexes.at((*current)->get_key()))->get_neighbours() = neigh;
+        }
+    }
+
+
+    return graph_copy;
+}
+
 Graph* Graph::generate_bipartite_graph(int number_of_vertexes, double p){
     // seed rand
     srand(time(NULL));
@@ -155,16 +182,6 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
     return graph;
 }
 
-Graph* Graph::get_graph_copy(){
-    Graph* graph_copy = new Graph();
-
-    vector<Vertex*> vertexes_copy(this->vertexes);
-    vector<Edge*> edges_copy(this->edges);
-
-    graph_copy->vertexes = vertexes_copy;
-    graph_copy->edges = edges_copy;
-    return graph_copy;
-}
 
 
 Graph * Graph::generate_graph_from_file(char* filename){
