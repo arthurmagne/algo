@@ -15,6 +15,8 @@ public:
     static set<Vertex *> two_aprox_algorithm(Graph *any_graph);
     static set<Vertex*> greedy_algorithm(Graph *any_graph);
     static set<Node*> optimal_tree(Tree *any_tree);
+    static set<Vertex*> two_aprox_first_depth(Graph* g);
+    static void two_aprox_first_depth_rec(set<Vertex*> s, Vertex* current, Vertex* prec);
 };
 
 #endif // ALGORITHMS_HPP

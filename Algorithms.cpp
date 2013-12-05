@@ -200,4 +200,59 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 }*/
 
 
+set<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
+
+    set<Vertex*> cover;
+    std::vector<Vertex*> list = g->get_vertexes_copy();
+
+    while(cover.size() != g->get_number_of_vertexes()){
+        Vertex* current;
+        for(vector<Vertex*>::iterator it = current->get_neighbours().begin() ; !cover.find(*it); ++it)
+            current = (*it);
+        two_aprox_first_depth_rec(cover, current, NULL);
+    }
+
+    return cover;
+}
+
+
+void Algorithms::two_aprox_first_depth_rec(set<Vertex*> s, Vertex* current, Vertex* prec){
+
+    Vertex* newVertex = new Vertex(current->get_key());
+    if(prec != NULL)
+        newVertex->add_neighbour(prec->get_key());
+    s.insert(newVertex);
+
+    Vertex* min;
+
+    int i = 0;
+    while(i < current->get_number_of_neighbours()){
+
+    for(set<Vertex*>::iterator it = current->get_neighbours().begin() ; it != current->get_neighbours().end(); ++it){
+        if (it == it->get_neighbours().begin() && !(s.find(*it)))
+           min = *it;
+        if (((*it)->get_key() < min->get_key()) && !(s.find(*it)))
+           min = *it;
+
+    }
+
+    if(min == NULL)
+        return;
+
+    Vertex* newNeighbour = new Vertex(min->get_key());
+    newVertex->add_neighbour(newNeighbour);
+    two_aprox_first_depth_rec(s, min, newVertex);
+    i++;
+
+    }
+
+}
+
+
+
+
+
+
+
+
 
