@@ -89,7 +89,6 @@ set<Vertex*> Algorithms::greedy_algorithm(Graph *any_graph){
         // remove the covered edges
         for (set<Vertex*>::iterator it = max_degree->get_neighbours().begin() ; it != max_degree->get_neighbours().end(); ++it){
             (*it)->get_neighbours().erase(max_degree);
-
         }
         // remove all edges from max_degree node
         max_degree->get_neighbours().clear();
@@ -150,6 +149,99 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
     return cover;
 }
 
+set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, int k){
+    set<set<Vertex*> > set_of_cover;
+    // We loop til cpt > k
+    int cpt = 0;
+
+    // two choises : we add this vertex in the cover or his neighbours
+
+
+    // 1 : add max_degree to the cover1
+    // create a new graph
+    Graph * graph_left = any_graph->get_graph_copy();
+
+    //find max_degree in this graph
+    Vertex* max_degree_left = graph_left->get_vertexes_copy().at(0);
+    for (vector<Vertex*>::iterator it = graph_left->get_iterator_begin(); it != graph_left->get_iterator_end() ; ++it){
+        if ((*it)->get_number_of_neighbours() > max_degree_left->get_number_of_neighbours())
+            max_degree_left = (*it);
+    }
+    set<Vertex*> cover_left;
+    cover_left.insert(max_degree_left);
+    // remove all edges incident to max_degree
+    // remove the covered edges
+    for (set<Vertex*>::iterator it = max_degree_left->get_neighbours().begin() ; it != max_degree_left->get_neighbours().end(); ++it){
+        (*it)->get_neighbours().erase(max_degree_left);
+    }
+    // remove all edges from max_degree node
+    max_degree_left->get_neighbours().clear();
+    // launch second function
+    parametric_algorithm_impl(graph_left, cover_left, ++cpt);
+
+
+
+    // 2 : add his neighbours
+    Graph * graph_right = any_graph->get_graph_copy();
+    //find max_degree in this graph
+    Vertex* max_degree_right = graph_right->get_vertexes_copy().at(0);
+    for (vector<Vertex*>::iterator it = graph_right->get_iterator_begin(); it != graph_right->get_iterator_end() ; ++it){
+        if ((*it)->get_number_of_neighbours() > max_degree_right->get_number_of_neighbours())
+            max_degree_right = (*it);
+    }
+    set<Vertex*> cover_right;
+    // remove the covered edges
+    for (set<Vertex*>::iterator it = max_degree_left->get_neighbours().begin() ; it != max_degree_left->get_neighbours().end(); ++it){
+        (*it)->get_neighbours().erase(max_degree_left);
+    }
+    // remove all edges from max_degree node
+    max_degree_left->get_neighbours().clear();
+
+    set<Vertex*>::iterator tmp;
+
+    for (set<Vertex*>::iterator current = max_degree_right->get_neighbours().begin(); current != max_degree_right->get_neighbours().end() ; ){
+        // faire un second for !
+        cover_right.insert(*current);
+        Vertex* vertex_tmp = (*current);
+
+        for (set<Vertex*>::iterator it = (*current)->get_neighbours().begin(); it != (*current)->get_neighbours().end() ; ++it){
+
+            // remove all edges from this neighbour
+            // remove it from the other side
+
+            if ((*it)->get_key() == max_degree_right->get_key()){
+                tmp = current;
+                ++tmp;
+                (*it)->get_neighbours().erase(vertex_tmp);
+            }else{
+                (*it)->get_neighbours().erase(vertex_tmp);
+            }
+
+
+        }
+        (vertex_tmp)->get_neighbours().clear();
+        current = tmp;
+
+
+    }
+
+    // launch second function
+    parametric_algorithm_impl(graph_right, cover_right, cpt);
+
+    return cover_left;
+}
+
+void Algorithms::parametric_algorithm_impl(Graph * current_graph, set<Vertex*> current_cover, int k){
+    cout << endl << "Nouvel appel" << endl;
+    for (set<Vertex*>::iterator it = current_cover.begin() ; it != current_cover.end(); ++it){
+        cout << (*it)->get_key() << endl;
+    }
+    Utils::display_graph(current_graph);
+
+}
+
+
+
 /*set<Node*> Algorithms::optimal_tree(Tree *any_tree){
     //On mélange la liste des sommets
     set<Node*> cover;
@@ -199,7 +291,7 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
     return cover;
 }*/
 
-
+/*
 set<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
     set<Vertex*> cover;
@@ -247,7 +339,7 @@ void Algorithms::two_aprox_first_depth_rec(set<Vertex*> s, Vertex* current, Vert
     }
 
 }
-
+*/
 
 
 

@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    Tree * tree = Tree::generate_tree(10);
+    /*Tree * tree = Tree::generate_tree(10);
     cout << endl << "On génère un arbre à " << tree->get_number_of_nodes() << " noeuds." << endl;
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_tree(tree);
@@ -29,7 +29,7 @@ int main()
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(graph_with_cover_origin);
 
-    /* Algo */
+    /* Algo
     cout << endl << "Greedy algorithm: " << endl;
     set<Vertex*> greedy_cover = Algorithms::greedy_algorithm(graph_with_cover_origin->get_graph_copy());
     for (set<Vertex*>::iterator it = greedy_cover.begin() ; it != greedy_cover.end(); ++it){
@@ -47,7 +47,7 @@ int main()
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Graph * g = Graph::generate_graph_from_file("../../../Documents/CAA/algo/file");
     Utils::display_graph(g);
-    cout << endl;*/
+    cout << endl;
 
     cout << endl << "Optimal Tree: " << endl;
     set<Node*> optimal_tree_cover = Algorithms::optimal_tree(tree->get_tree_copy());
@@ -56,9 +56,15 @@ int main()
         cout << (*it)->get_key() ;
     }
     cout << endl << "Fin optimal tree" << endl;
-    cout << endl;
+    cout << endl;*/
+
+    Graph * graph_with_cover_origin = Graph::generate_graph_with_min_cover(10, 4, 0.25);
+    cout << endl << "On génère un graphe avec une couverture de taille 4 à " << graph_with_cover_origin->get_number_of_vertexes() << " sommets." << endl;
+    cout << "La liste d'adjacences obtenue est la suivante: " << endl;
+    Utils::display_graph(graph_with_cover_origin);
 
 
+    Algorithms::parametric_algorithm(graph_with_cover_origin, 10);
 
 
 

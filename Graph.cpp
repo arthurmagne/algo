@@ -75,6 +75,7 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
 }
 
 // !!! This function doesn't copy the edges !!!
+// !!! Doesn't work if the edges aren't sorted !!!
 Graph* Graph::get_graph_copy(){
     Graph* graph_copy = new Graph();
 
@@ -82,6 +83,7 @@ Graph* Graph::get_graph_copy(){
     for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
         Vertex * vertex = new Vertex((*current)->get_key());
         graph_copy->vertexes.push_back(vertex);
+
     }
     // we add the neighbours
     for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
@@ -149,7 +151,8 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
 
     // shuffle randomly the vertexes of our graph
     // Complexity : Linear in the number of vertexes
-    random_shuffle(graph->vertexes.begin(), graph->vertexes.end());
+    // pause probleme pour la copie de graph !!!!!!!!!!!
+    //random_shuffle(graph->vertexes.begin(), graph->vertexes.end());
 
     /* ------ */
     /* only if we need the cover */
