@@ -5,6 +5,9 @@
 
 using namespace std;
 
+Tree::Tree()
+{
+}
 
 Tree::Tree(Node * root)
 {
@@ -45,6 +48,36 @@ Tree* Tree::generate_tree(int nb_vertices)
     tree->nodes.push_back(child);
   }
   return tree;
+}
+
+// !!! This function doesn't copy the edges !!!
+Tree* Tree::get_tree_copy(){
+
+    Tree* tree_copy = new Tree();
+
+
+    // we add all the nodes in the structure
+    for (vector<Node*>::iterator current = this->nodes.begin() ; current != this->nodes.end(); ++current){
+        Node * node = new Node((*current)->get_key());
+        tree_copy->nodes.push_back(node);
+    }
+    // we add the children
+    for (vector<Node*>::iterator current = this->nodes.begin() ; current != this->nodes.end(); ++current){
+        if ((*current)->number_of_children() != 0){
+            set<Node*> children;
+            for (set<Node*>::iterator it = (*current)->get_children().begin() ; it != (*current)->get_children().end(); ++it){
+                // we find the good node
+                children.insert(tree_copy->nodes.at((*it)->get_key()));
+            }
+            ((Node*)tree_copy->nodes.at((*current)->get_key()))->get_children() = children;
+        }
+        // we add the father
+        if ((*current)->get_parent() != NULL)
+            ((Node*)tree_copy->nodes.at((*current)->get_key()))->set_parent((Node*)tree_copy->nodes.at(((Node*)(*current)->get_parent())->get_key()));
+    }
+    // set the root
+    tree_copy->root = tree_copy->nodes.at(this->root->get_key());
+    return tree_copy;
 }
 
 int Tree::get_number_of_nodes(){

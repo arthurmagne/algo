@@ -8,6 +8,7 @@
 class Tree
 {
 public:
+    Tree();
     Tree(Node * root);
     ~Tree();
     static Tree *generate_tree(int nb_vertices);
@@ -19,6 +20,7 @@ public:
     vector<Node*> & get_nodes();
     bool exist_edge(Tree t);
     vector<TreeEdge*> get_edges();
+    Tree* get_tree_copy();
 
 
 private:

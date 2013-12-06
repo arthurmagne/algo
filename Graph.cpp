@@ -74,18 +74,16 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
     return graph;
 }
 
-// !!! This function don't copy the edges !!!
+// !!! This function doesn't copy the edges !!!
 Graph* Graph::get_graph_copy(){
     Graph* graph_copy = new Graph();
-
-    vector<Edge*> edges;
 
     // we add all the vertexes in the structure
     for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
         Vertex * vertex = new Vertex((*current)->get_key());
         graph_copy->vertexes.push_back(vertex);
     }
-    // we add the neighbours and create the edges
+    // we add the neighbours
     for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
         if ((*current)->get_number_of_neighbours() != 0){
             set<Vertex*> neigh;
@@ -96,8 +94,6 @@ Graph* Graph::get_graph_copy(){
             ((Vertex*)graph_copy->vertexes.at((*current)->get_key()))->get_neighbours() = neigh;
         }
     }
-
-
     return graph_copy;
 }
 

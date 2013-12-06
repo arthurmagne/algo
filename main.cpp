@@ -50,7 +50,7 @@ int main()
     cout << endl;*/
 
     cout << endl << "Optimal Tree: " << endl;
-    set<Node*> optimal_tree_cover = Algorithms::optimal_tree(tree);
+    set<Node*> optimal_tree_cover = Algorithms::optimal_tree(tree->get_tree_copy());
     cout << endl << "La couverture est " << endl;
     for (set<Node*>::iterator it = optimal_tree_cover.begin() ; it != optimal_tree_cover.end(); ++it){
         cout << (*it)->get_key() ;
