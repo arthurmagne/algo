@@ -185,8 +185,8 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
 
 Graph * Graph::generate_graph_from_file(char* filename){
 
-   // if(Utils::detect_cycle(filename))
-     //   cout << "cycle" <<endl;
+    if(Utils::detect_cycle(filename))
+        cout << "cycle" <<endl;
 
     int num_vert=0;
     vector<char *> v;
@@ -198,21 +198,21 @@ Graph * Graph::generate_graph_from_file(char* filename){
     int size = 0;
     int loop = 0;
     int nb_vertices = 0;
-    /** Chaque tour de boucle correspond à une ligne du document texte contenant la liste d'adjacence*/
+    /* Chaque tour de boucle correspond à une ligne du document texte contenant la liste d'adjacence*/
     while (!fin.eof()){
       char str[20];
       fin.getline(str, 20);
-      /** Premier tour de boucle, on recupere le nombre de sommets*/
+      /* Premier tour de boucle, on recupere le nombre de sommets*/
       if(loop++ == 0){
         char* line_token[10] = {};
         line_token[0] = strtok(str, " :");
         nb_vertices = atoi(line_token[0]);
-      /** On cree les sommets du graphe*/
+      /* On cree les sommets du graphe*/
         for(int i = 0; i< nb_vertices; i++)
             ver.push_back(new Vertex(i));
       }
 
-      /** Deuxieme tour de boucle on récupère la liste d'adjacence ligne par ligne*/
+      /* Deuxieme tour de boucle on récupère la liste d'adjacence ligne par ligne*/
       if(loop>1 && loop<ver.size() + 2){
           char* line_token[10] = {};
           line_token[0] = strtok(str, " :");
@@ -226,8 +226,8 @@ Graph * Graph::generate_graph_from_file(char* filename){
         }
       }
 
-    /** Pour chaque ligne, on crée les arretes correspondantes et on ajoute les voisins au sommet*/
-      if(v.size()>1)
+    /* Pour chaque ligne, on crée les arretes correspondantes et on ajoute les voisins au sommet*/
+      if(v.size()>size +1)
          {
              for(int j =1+size; j<v.size(); j++){
                  string sv;
@@ -243,7 +243,7 @@ Graph * Graph::generate_graph_from_file(char* filename){
       num_vert++;
     }
 }
-    /** On affecte les sommets et arretes au graphe*/
+    /* On affecte les sommets et arretes au graphe*/
     g->edges = e;
     g->vertexes = ver;
     return g;
