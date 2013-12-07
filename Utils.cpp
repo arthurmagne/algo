@@ -28,11 +28,9 @@ void Utils::display_graph(Graph * graph){
     cout << graph->get_number_of_vertexes() << endl;
     for (vector<Vertex*>::iterator it = graph->get_iterator_begin() ; it != graph->get_iterator_end(); ++it){
         if ((*it)->get_number_of_neighbours() == 0)
-          cout << (*it)->get_key() << ": " << endl;
-        else{
+            continue;
         cout << (*it)->get_key() << ": ";
         (*it)->display_neighbours();
-        }
     }
 }
 
