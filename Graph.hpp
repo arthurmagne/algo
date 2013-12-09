@@ -19,7 +19,7 @@ public:
     int get_number_of_vertexes();
     vector<Vertex*>::iterator get_iterator_begin();
     vector<Vertex*>::iterator get_iterator_end();
-    vector<Vertex *>& get_vertexes_copy();
+    vector<Vertex *>& get_vertexes();
     vector<Edge *> get_edges_copy();
     Graph* get_graph_copy();
 

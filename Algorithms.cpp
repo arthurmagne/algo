@@ -11,12 +11,10 @@ Algorithms::Algorithms()
 {
 }
 
-/* A greedy algorithm always makes the choice that looks best at the moment.
-*  The greedy heuristic cannot always find an optimal solution!
-*  If the graph is represented by an adjacency list this can be implemented in O(m + n) time. */
+
 set<Vertex*> Algorithms::two_aprox_algorithm(Graph *any_graph){
     // We do have an adjacency list : all vertexes already have a list of neighbours!
-    vector<Vertex*> vertexes = any_graph->get_vertexes_copy();
+    vector<Vertex*> vertexes = any_graph->get_vertexes();
     set<Vertex*> cover;
     bool contains_edges = true;
     while (contains_edges){
@@ -63,10 +61,12 @@ set<Vertex*> Algorithms::two_aprox_algorithm(Graph *any_graph){
 
 /* We choose the vertex with the higher degree, add it to the cover
 *  and remove it and his neighbours from the vertex vector
-**/
+* " A greedy algorithm always makes the choice that looks best at the moment.
+*  The greedy heuristic cannot always find an optimal solution!
+*  If the graph is represented by an adjacency list this can be implemented in O(m + n) time." */
 set<Vertex*> Algorithms::greedy_algorithm(Graph *any_graph){
     // We do have an adjacency list : all vertexes already have a list of neighbours!
-    vector<Vertex*> vertexes = any_graph->get_vertexes_copy();
+    vector<Vertex*> vertexes = any_graph->get_vertexes();
     set<Vertex*> cover;
     Vertex * max_degree;
     bool contains_edges = true;
@@ -80,8 +80,11 @@ set<Vertex*> Algorithms::greedy_algorithm(Graph *any_graph){
             if ((*current)->get_number_of_neighbours() > max_degree->get_number_of_neighbours())
                max_degree = *current;
         }
-        if (max_degree->get_number_of_neighbours() != 0)
+        if (max_degree->get_number_of_neighbours() != 0){
             contains_edges = true;
+        }else{
+            continue;
+        }
 
         cover.insert(max_degree);
 
@@ -128,15 +131,15 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
             current=current->get_parent();
             cover.insert(current);
 
-             //On supprime les arretes fils-père
+             //On supprime les aretes fils-père
              for (set<Node*>::iterator it = current->get_children().begin() ; it != current->get_children().end(); ++it){
 
                  (*it)->set_parent(NULL);
               }
-              //On supprime les arretes pere-fils
+              //On supprime les aretes pere-fils
              current->get_children().clear();
 
-             //On supprime l'arrete pere-"grandpere"
+             //On supprime l'arete pere-"grandpere"
              if(current->get_parent()!=NULL){
                   Node* current_father = current->get_parent();
                   current->set_parent(NULL);
@@ -148,8 +151,11 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
     return cover;
 }
-
-set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, int k){
+/*
+set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> current_cover, int cpt, int k){
+    if (cpt >= k){
+        return NULL;
+    }
     set<set<Vertex*> > set_of_cover;
     // We loop til cpt > k
     int cpt = 0;
@@ -226,7 +232,7 @@ set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, int k){
     }
 
     // launch second function
-    parametric_algorithm_impl(graph_right, cover_right, cpt);
+    parametric_algorithm(graph_right, cover_right, ++cpt, k);
 
     return cover_left;
 }
