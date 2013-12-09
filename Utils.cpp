@@ -107,4 +107,3 @@ bool Utils::detect_cycle(char* filename){
 
       return false;
     }
-
