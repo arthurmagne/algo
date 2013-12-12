@@ -18,8 +18,8 @@ public:
     static set<Vertex*> parametric_algorithm(Graph *any_graph, set<Vertex*> current_cover, int cpt, int k);
     static void parametric_algorithm_impl(Graph * current_graph, set<Vertex*> current_cover, int k);
 
-    static set<Vertex*> two_aprox_first_depth(Graph* g);
-    static void two_aprox_first_depth_rec(set<Vertex*> s, Vertex* current, Vertex* prec);
+    static std::vector<Vertex*> two_aprox_first_depth(Graph* g);
+    static std::vector<Vertex*> two_aprox_first_depth_rec(Graph * g, std::vector<Vertex*> s, Vertex* current, Vertex* prec, std::vector<int> keys);
 
 };
 

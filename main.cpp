@@ -19,6 +19,8 @@ int main(int argc,char *argv[])
 
 
 
+
+
     if (argv[1] == std::string("generate_graph_from_file"))
     {
         cout << endl << "Génération d'un graphe à partir d'un fichier contenant une liste d'adjacence' " << endl;
@@ -94,6 +96,14 @@ int main(int argc,char *argv[])
         cout << endl;
     }
 
+    else if(argv[1] == std::string("two_approx_first_depth")){
+        Graph * graph = Graph::generate_graph_from_file(argv[2]);
+        std::vector<Vertex*> s = Algorithms::two_aprox_first_depth(graph);
+        for(int i = 0; i<s.size(); i++){
+            cout << s[i]->get_key() << " ";
+        }
+        cout << endl;
+    }
 
 
     return 0;

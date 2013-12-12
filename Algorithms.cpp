@@ -299,68 +299,93 @@ void Algorithms::parametric_algorithm_impl(Graph * current_graph, set<Vertex*> c
 
 
 
-set<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
+std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
-    set<Vertex*> cover;
+    std::vector<Vertex*> cover;
     std::vector<Vertex*> list = g->vertexes;
-    cout << list.size() << endl;
-
-   while(cover.size() != g->get_number_of_vertexes()){
+    std::vector<int> keys;
 
        Vertex* current;
-       for(int i=0; i< list.size(); i++){
+       Vertex* root = list[0];
+       int i;
 
-           if(cover.find(list[i]) == cover.end()){
-               current = list[i];
-               two_aprox_first_depth_rec(cover, current, NULL);
-           }
+       while(i != g->get_number_of_vertexes()){
+           for(i=0; i<cover.size(); i++)
+               if(list[i]->get_key() == cover[i]->get_key())
+                   ;
+
+           current = list[i];
+           if(i<g->get_number_of_vertexes())
+            cover = two_aprox_first_depth_rec(g, cover, current, NULL, keys);
        }
 
-   }
+
+       for(int j=0; j<cover.size(); j++)
+           if(cover[j]->get_number_of_neighbours() < 2 && cover[j]->get_key() != root->get_key())
+               cover.erase(cover.begin()+j);
+
 
     return cover;
 }
 
 
-void Algorithms::two_aprox_first_depth_rec(set<Vertex*> s, Vertex* current, Vertex* prec){
+std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector<Vertex*> s, Vertex* current, Vertex* prec, std::vector<int> keys){
+    bool minChanged = false;
 
     Vertex* newVertex = new Vertex(current->get_key());
     if(prec != NULL)
         newVertex->add_neighbour(new Vertex(prec->get_key()));
-    s.insert(newVertex);
+    s.push_back(newVertex);
+
 
     Vertex* nextVertex;
-    int min;
+    int min = g->get_number_of_vertexes();
     int i = 0;
 
     while(i < current->get_number_of_neighbours()){
 
+        minChanged = false;
+
         for(set<Vertex*>::iterator it = (current->neighbours).begin() ; it != (current->neighbours).end(); ++it){
-            cout << "h" << endl;
-            cout << "current " << current->get_key()<< endl;
-            if (it == current->neighbours.begin() && (s.find(*it) == s.end())){
+
+            if (it == current->neighbours.begin() && ((find(keys.begin(), keys.end(),(*it)->get_key())) == keys.end())){
                 min = (*it)->get_key();
                 nextVertex = (*it);
+                minChanged = true;
             }
 
 
-            if (((*it)->get_key() < min) && (s.find(*it) == s.end())){
+            if (((*it)->get_key() < min) && ((find(keys.begin(), keys.end(),(*it)->get_key())) == keys.end())){
                 min = (*it)->get_key();
                 nextVertex = (*it);
+                minChanged = true;
+
             }
 
-            cout << min << endl;
         }
 
-        if(min == NULL)
-            return;
+        if(minChanged == true)
+            keys.push_back(newVertex->get_key());
+
+
+        if(minChanged == false)
+            return s;
 
         Vertex* newNeighbour = new Vertex(min);
         newVertex->add_neighbour(newNeighbour);
-        two_aprox_first_depth_rec(s, nextVertex, newVertex);
+        s = two_aprox_first_depth_rec(g, s, nextVertex, newVertex, keys);
+
+
+        std::vector<int> keys2;
+        for(int i = 0; i<s.size(); i++){
+            keys2.push_back(s[i]->get_key());
+               }
+        keys = keys2;
         i++;
 
     }
+
+    return s;
 
 
 }
