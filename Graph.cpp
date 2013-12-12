@@ -233,22 +233,21 @@ Graph * Graph::generate_graph_from_file(char* filename){
 // !!! Doesn't work if the edges aren't sorted !!!
 Graph* Graph::get_graph_copy(){
     Graph* graph_copy = new Graph();
-
     // we add all the vertexes in the structure
     for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
         Vertex * vertex = new Vertex((*current)->get_key());
         graph_copy->vertexes.push_back(vertex);
-
     }
     // we add the neighbours
     for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
         if ((*current)->get_number_of_neighbours() != 0){
             set<Vertex*> neigh;
-            for (set<Vertex*>::iterator it = (*current)->get_neighbours().begin() ; it != (*current)->get_neighbours().end(); ++it){
+
+            for (set<Vertex*>::iterator it = (*current)->neighbours.begin() ; it != (*current)->neighbours.end(); ++it){
                 // we find the good vertex
                 neigh.insert(graph_copy->vertexes.at((*it)->get_key()));
             }
-            ((Vertex*)graph_copy->vertexes.at((*current)->get_key()))->get_neighbours() = neigh;
+            ((Vertex*)graph_copy->vertexes.at((*current)->get_key()))->neighbours = neigh;
         }
     }
     return graph_copy;

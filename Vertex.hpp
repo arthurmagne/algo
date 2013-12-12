@@ -14,10 +14,10 @@ public:
     int get_number_of_neighbours();
     void add_neighbour(Vertex * vertex);
     void display_neighbours();
-    set<Vertex *>& get_neighbours();
+    set<Vertex *> get_neighbours();
 
 
-private:
+
     int key_value;
     set<Vertex *> neighbours;
 };
