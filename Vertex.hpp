@@ -18,9 +18,11 @@ public:
     void add_pred(Vertex * vertex);
     void add_succ(Vertex * vertex);
     void display_neighbours();
+
     set<Vertex *>& get_pred();
     set<Vertex *>& get_succ();
     set<Vertex *>& get_neighbours();
+
 
 
     int key_value;

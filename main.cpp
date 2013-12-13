@@ -9,17 +9,12 @@ using namespace std;
 
 int main(int argc,char *argv[])
 {
-
     if(argc < 2){
         cout << "not enough arguments, usage: [algorithm_name][file_path]" << endl;
         cout << "[algorithm_name][size_graph][probability]" << endl;
         cout << "[algorithm_name][size_graph][cover_size][probability]" << endl;
         return 0;
     }
-
-
-
-
 
     if (argv[1] == std::string("generate_graph_from_file"))
     {
@@ -29,6 +24,7 @@ int main(int argc,char *argv[])
         Utils::display_graph(g);
         cout << endl;;
     }
+
 
     else if(argv[1] == std::string("greedy_algorithm")){
         Graph* graph_origin = Graph::generate_graph_from_file(argv[2]);

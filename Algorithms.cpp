@@ -153,30 +153,52 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
     return cover;
 }
-/*
-set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> current_cover, int cpt, int k){
-    if (cpt >= k){
-        return NULL;
+
+// le cover est à dupliquer à chaque nouvel appel comme le graph
+set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> current_cover, int cpt, int k){
+
+    bool has_edges = false;
+    for (vector<Vertex*>::iterator it = any_graph->get_iterator_begin(); it != any_graph->get_iterator_end() ; ++it){
+        if ((*it)->get_number_of_neighbours() != 0){
+            has_edges = true;
+            break;
+        }
+
     }
-    set<set<Vertex*> > set_of_cover;
-    // We loop til cpt > k
-    int cpt = 0;
+
+    // we didn't find a cover
+    if (cpt >= k){
+        set<int> error;
+        error.insert(-1);
+        return error;
+    }
+
+    // we find a cover
+    if (!has_edges){
+        return current_cover;
+    }
+
+    set<int> cover_left = current_cover;
+    set<int> cover_right = current_cover;
+
 
     // two choises : we add this vertex in the cover or his neighbours
 
 
-    // 1 : add max_degree to the cover1
+    /**
+    * 1 : add max_degree to the cover1
+    **/
+
     // create a new graph
     Graph * graph_left = any_graph->get_graph_copy();
 
     //find max_degree in this graph
-    Vertex* max_degree_left = graph_left->get_vertexes_copy().at(0);
+    Vertex* max_degree_left = graph_left->get_vertexes().at(0);
     for (vector<Vertex*>::iterator it = graph_left->get_iterator_begin(); it != graph_left->get_iterator_end() ; ++it){
         if ((*it)->get_number_of_neighbours() > max_degree_left->get_number_of_neighbours())
             max_degree_left = (*it);
     }
-    set<Vertex*> cover_left;
-    cover_left.insert(max_degree_left);
+    cover_left.insert(max_degree_left->get_key());
     // remove all edges incident to max_degree
     // remove the covered edges
     for (set<Vertex*>::iterator it = max_degree_left->get_neighbours().begin() ; it != max_degree_left->get_neighbours().end(); ++it){
@@ -184,20 +206,23 @@ set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> cu
     }
     // remove all edges from max_degree node
     max_degree_left->get_neighbours().clear();
-    // launch second function
-    parametric_algorithm_impl(graph_left, cover_left, ++cpt);
 
+    // launch this function
+    set<int> result_left = parametric_algorithm_impl(graph_left, cover_left, ++cpt, k);
 
+    /** end 1 **/
 
-    // 2 : add his neighbours
+    /**
+    * 2 : add his neighbours
+    **/
+
     Graph * graph_right = any_graph->get_graph_copy();
     //find max_degree in this graph
-    Vertex* max_degree_right = graph_right->get_vertexes_copy().at(0);
+    Vertex* max_degree_right = graph_right->get_vertexes().at(0);
     for (vector<Vertex*>::iterator it = graph_right->get_iterator_begin(); it != graph_right->get_iterator_end() ; ++it){
         if ((*it)->get_number_of_neighbours() > max_degree_right->get_number_of_neighbours())
             max_degree_right = (*it);
     }
-    set<Vertex*> cover_right;
     // remove the covered edges
     for (set<Vertex*>::iterator it = max_degree_left->get_neighbours().begin() ; it != max_degree_left->get_neighbours().end(); ++it){
         (*it)->get_neighbours().erase(max_degree_left);
@@ -209,7 +234,7 @@ set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> cu
 
     for (set<Vertex*>::iterator current = max_degree_right->get_neighbours().begin(); current != max_degree_right->get_neighbours().end() ; ){
         // faire un second for !
-        cover_right.insert(*current);
+        cover_right.insert((*current)->get_key());
         Vertex* vertex_tmp = (*current);
 
         for (set<Vertex*>::iterator it = (*current)->get_neighbours().begin(); it != (*current)->get_neighbours().end() ; ++it){
@@ -230,21 +255,26 @@ set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> cu
         (vertex_tmp)->get_neighbours().clear();
         current = tmp;
 
-
     }
 
-    // launch second function
-    parametric_algorithm(graph_right, cover_right, ++cpt, k);
+    /** end 2 **/
 
-    return cover_left;
+    // relaunch this function
+    set<int> result_right = parametric_algorithm_impl(graph_right, cover_right, ++cpt, k);
+
+    set<int>::iterator first_value_iterator = result_right.begin();
+    int first_value = (*first_value_iterator);
+    // we choose the smaller cover unless this one contain -1
+    if ((result_left.size() > result_right.size()) && (first_value != -1))
+        return result_right;
+    return result_left;
 }
-*/
-void Algorithms::parametric_algorithm_impl(Graph * current_graph, set<Vertex*> current_cover, int k){
-    cout << endl << "Nouvel appel" << endl;
-    for (set<Vertex*>::iterator it = current_cover.begin() ; it != current_cover.end(); ++it){
-        cout << (*it)->get_key() << endl;
-    }
-    Utils::display_graph(current_graph);
+
+// Launch the real function
+set<int> Algorithms::parametric_algorithm(Graph * current_graph, int k){
+    set<int> empty_set;
+    return parametric_algorithm_impl(current_graph, empty_set, 0, k);
+
 
 }
 
@@ -616,7 +646,7 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
 std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
     std::vector<Vertex*> cover;
-    std::vector<Vertex*> list = g->vertexes;
+    std::vector<Vertex*> list = g->get_vertexes();
     std::vector<int> keys;
 
        Vertex* current;
