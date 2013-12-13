@@ -35,7 +35,7 @@ vector<Vertex*>::iterator  Graph::get_iterator_end(){
     return this->vertexes.end();
 }
 
-vector<Vertex *> &Graph::get_vertexes_copy(){
+vector<Vertex *> &Graph::get_vertexes(){
     return this->vertexes;
 }
 
@@ -60,7 +60,7 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
 
     // we create an edge between two vertexes with the probabitity p
     for (vector<Vertex*>::iterator current = graph->vertexes.begin() ; current != graph->vertexes.end(); ++current){
-        for (vector<Vertex*>::iterator it = graph->vertexes.begin() ; it != graph->vertexes.end(); ++it){
+        for (vector<Vertex*>::iterator it = current ; it != graph->vertexes.end(); ++it){
             if ( (rand() % 100) < (p*100) ){
                 if ((*current)->get_key() != (*it)->get_key()){
                     Edge * edge = new Edge(*current, *it);
@@ -74,30 +74,7 @@ Graph* Graph::generate_graph(int number_of_vertexes, double p){
     return graph;
 }
 
-// !!! This function doesn't copy the edges !!!
-// !!! Doesn't work if the edges aren't sorted !!!
-Graph* Graph::get_graph_copy(){
-    Graph* graph_copy = new Graph();
 
-    // we add all the vertexes in the structure
-    for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
-        Vertex * vertex = new Vertex((*current)->get_key());
-        graph_copy->vertexes.push_back(vertex);
-
-    }
-    // we add the neighbours
-    for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
-        if ((*current)->get_number_of_neighbours() != 0){
-            set<Vertex*> neigh;
-            for (set<Vertex*>::iterator it = (*current)->get_neighbours().begin() ; it != (*current)->get_neighbours().end(); ++it){
-                // we find the good vertex
-                neigh.insert(graph_copy->vertexes.at((*it)->get_key()));
-            }
-            ((Vertex*)graph_copy->vertexes.at((*current)->get_key()))->get_neighbours() = neigh;
-        }
-    }
-    return graph_copy;
-}
 
 Graph* Graph::generate_bipartite_graph(int number_of_vertexes, double p){
     // seed rand
@@ -189,11 +166,12 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
     srand(time(NULL));
 
     Graph * graph = new Graph();
-
+    vector<int> randomCover;
     // we add all the vertexes in the structure
     for (int i=0; i<number_of_vertexes ; i++){
         Vertex * vertex = new Vertex(i);
         graph->vertexes.push_back(vertex);
+        randomCover.push_back(i);
     }
 
     // shuffle randomly the vertexes of our graph
@@ -201,28 +179,30 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
     // pause probleme pour la copie de graph !!!!!!!!!!!
     //random_shuffle(graph->vertexes.begin(), graph->vertexes.end());
 
+    random_shuffle(randomCover.begin(), randomCover.end());
+
     /* ------ */
     /* only if we need the cover */
-    vector<Vertex*> cover(graph->vertexes.begin(), graph->vertexes.begin()+cover_size);
+    //vector<Vertex*> cover(graph->vertexes.begin(), graph->vertexes.begin()+cover_size);
     /* ------ */
 
     cout << endl << "La couverture du graphe est : ";
     // we create an edge between two vertexes with the probabitity p
     // with the first vertex taken in the cover: the "cover_size" first vertexes randomly shuffle previously
-    // then we don't have to create a new subvector with the cover ? Do we need this?
-    for (vector<Vertex*>::iterator current = graph->vertexes.begin() ; current != graph->vertexes.begin() + cover_size; ++current){
+    for (vector<int>::iterator cpt = randomCover.begin() ; cpt != randomCover.begin() + cover_size; ++cpt){
+        Vertex* current = graph->vertexes.at(*cpt);
         for (vector<Vertex*>::iterator it = graph->vertexes.begin() ; it != graph->vertexes.end(); ++it){
             if ( (rand() % 100) < (p*100) ){
-                if ((*current)->get_key() != (*it)->get_key()){
-                    Edge * edge = new Edge(*current, *it);
+                if (current->get_key() != (*it)->get_key()){
+                    Edge * edge = new Edge(current, *it);
                     graph->edges.push_back(edge);
-                    (*current)->add_neighbour(*it);
-                    (*it)->add_neighbour(*current);
+                    current->add_neighbour(*it);
+                    (*it)->add_neighbour(current);
 
                 }
             }
         }
-        cout << (*current)->get_key() << " ";
+        cout << current->get_key() << " ";
     }
     cout << endl;
     return graph;
@@ -294,4 +274,28 @@ Graph * Graph::generate_graph_from_file(char* filename){
     g->edges = e;
     g->vertexes = ver;
     return g;
+}
+
+// !!! This function doesn't copy the edges !!!
+// !!! Doesn't work if the edges aren't sorted !!!
+Graph* Graph::get_graph_copy(){
+    Graph* graph_copy = new Graph();
+    // we add all the vertexes in the structure
+    for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
+        Vertex * vertex = new Vertex((*current)->get_key());
+        graph_copy->vertexes.push_back(vertex);
+    }
+    // we add the neighbours
+    for (vector<Vertex*>::iterator current = this->vertexes.begin() ; current != this->vertexes.end(); ++current){
+        if ((*current)->get_number_of_neighbours() != 0){
+            set<Vertex*> neigh;
+
+            for (set<Vertex*>::iterator it = (*current)->neighbours.begin() ; it != (*current)->neighbours.end(); ++it){
+                // we find the good vertex
+                neigh.insert(graph_copy->vertexes.at((*it)->get_key()));
+            }
+            ((Vertex*)graph_copy->vertexes.at((*current)->get_key()))->neighbours = neigh;
+        }
+    }
+    return graph_copy;
 }
