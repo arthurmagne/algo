@@ -20,7 +20,7 @@ public:
     static set<Vertex*> bi_part_algorithm(Graph *any_graph);
     static void ford_fulkerson(queue<Vertex*> queue, Vertex* source, Vertex* terminal,set<Vertex*> part_S,set<Vertex*> part_T, int** edge_flow);
 
-    static set<Vertex*> parametric_algorithm(Graph *any_graph, set<Vertex*> current_cover, int cpt, int k);
+
 
     static void parametric_algorithm_impl(Graph * current_graph, set<Vertex*> current_cover, int k);
 

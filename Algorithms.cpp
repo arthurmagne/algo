@@ -153,7 +153,7 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
     return cover;
 }
-
+/*
 set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> current_cover, int cpt, int k){
     if (cpt >= k){
         return NULL;
@@ -238,7 +238,7 @@ set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> cu
 
     return cover_left;
 }
-
+*/
 void Algorithms::parametric_algorithm_impl(Graph * current_graph, set<Vertex*> current_cover, int k){
     cout << endl << "Nouvel appel" << endl;
     for (set<Vertex*>::iterator it = current_cover.begin() ; it != current_cover.end(); ++it){
@@ -330,7 +330,7 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
 
 
     //On stocke le premier sommet dans part_S
-    vector<Vertex*> copy_vertex=any_graph->get_vertexes_copy();
+    vector<Vertex*> copy_vertex=any_graph->get_vertexes();
     part_S.insert(copy_vertex.at(0));
 
     //Variable pour savoir si on parcours part_s ou part_T
@@ -612,7 +612,7 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
 }*/
 
 
-
+/*
 std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
     std::vector<Vertex*> cover;
@@ -641,7 +641,7 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
     return cover;
 }
-
+*/
 
 std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector<Vertex*> s, Vertex* current, Vertex* prec, std::vector<int> keys){
     bool minChanged = false;

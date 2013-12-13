@@ -20,7 +20,7 @@ public:
     void display_neighbours();
     set<Vertex *>& get_pred();
     set<Vertex *>& get_succ();
-    set<Vertex *> get_neighbours();
+    set<Vertex *>& get_neighbours();
 
 
     int key_value;
