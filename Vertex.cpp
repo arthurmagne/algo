@@ -39,7 +39,7 @@ void Vertex::add_succ(Vertex * vertex){
     this->succ.insert(vertex);
 }
 
-set<Vertex *> &Vertex::get_neighbours(){
+set<Vertex *> Vertex::get_neighbours(){
     return this->neighbours;
 }
 
