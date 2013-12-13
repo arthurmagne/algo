@@ -17,7 +17,7 @@ public:
     set<Vertex *>& get_neighbours();
 
 
-private:
+
     int key_value;
     set<Vertex *> neighbours;
 };
