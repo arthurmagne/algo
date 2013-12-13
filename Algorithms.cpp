@@ -153,7 +153,7 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
     return cover;
 }
-/*
+
 set<Vertex*> Algorithms::parametric_algorithm(Graph *any_graph, set<Vertex *> current_cover, int cpt, int k){
     if (cpt >= k){
         return NULL;
