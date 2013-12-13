@@ -106,6 +106,53 @@ Graph* Graph::generate_bipartite_graph(int number_of_vertexes, double p){
             }
         }
     }
+    //Verify if graph is connected
+    bool move = true;
+    while (move){
+     move =false;
+     for (vector<Vertex*>::iterator partAVertex = partA.begin() ; partAVertex != partA.end(); ++partAVertex){
+        if ((*partAVertex)->get_number_of_neighbours() == 0){
+            move = true;
+            int pos = rand() % partB.size();
+            (*partAVertex)->add_neighbour(partB.at(pos));
+            partB.at(pos)->add_neighbour(*partAVertex);
+        }
+        if ((*partAVertex)->get_number_of_neighbours() == 1 ){
+                set<Vertex*>::iterator tmp = (*partAVertex)->get_neighbours().begin() ;
+                if ((*tmp)->get_number_of_neighbours() == 1){
+                 move = true;
+                int pos = rand() % partB.size();
+                while (partB.at(pos) == (*tmp)){
+                     pos = rand() % partB.size();
+                }
+                (*partAVertex)->add_neighbour(partB.at(pos));
+                partB.at(pos)->add_neighbour(*partAVertex);
+                }
+        }
+
+      }
+     for (vector<Vertex*>::iterator partBVertex = partB.begin() ; partBVertex != partB.end(); ++partBVertex){
+        if ((*partBVertex)->get_number_of_neighbours() == 0){
+            move = true;
+            int pos = rand() % partA.size();
+            (*partBVertex)->add_neighbour(partA.at(pos));
+            partA.at(pos)->add_neighbour(*partBVertex);
+        }
+        if ((*partBVertex)->get_number_of_neighbours() == 1){
+            set<Vertex*>::iterator tmp = (*partBVertex)->get_neighbours().begin() ;
+            if ((*tmp)->get_number_of_neighbours() == 1){
+                move = true;
+                 int pos = rand() % partA.size();
+                 while (partA.at(pos) == (*tmp)){
+                      pos = rand() % partB.size();
+                 }
+              (*partBVertex)->add_neighbour(partA.at(pos));
+                 partA.at(pos)->add_neighbour(*partBVertex);
+
+            }
+         }
+      }
+    }
     return graph;
 }
 

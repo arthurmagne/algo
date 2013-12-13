@@ -13,3 +13,11 @@ Vertex * Edge::get_vertex1(){
 Vertex * Edge::get_vertex2(){
     return this->vertex2;
 }
+
+int Edge::get_flow(){
+    return this->flow;
+}
+
+void Edge::set_flow(int flow){
+    this->flow = flow;
+}
