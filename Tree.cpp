@@ -1,7 +1,17 @@
 #include <iostream>
 #include <string>
-#include "Tree.hpp"
 #include <cstdlib>
+#include <algorithm>
+#include <fstream>
+#include <string>
+#include <cstring>
+#include "Graph.hpp"
+#include "Utils.hpp"
+#include "Tree.hpp"
+
+using std::cout;
+using std::endl;
+using std::ifstream;
 
 using namespace std;
 
@@ -166,3 +176,65 @@ void Node::random_insert(Node* leaf)
 }*/
 
 
+Tree * Tree::generate_tree_from_file(char* filename){
+
+    ifstream fin;
+    fin.open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
+    Node* root = new Node(0);
+    Tree* t = new Tree(root);
+
+    vector<Node *> nodeList;
+    vector<char *> v;
+    vector<TreeEdge *> e;
+
+    int loop = 0;
+    int num_node=0;
+    int size = 0;
+    int nb_vertices = 0;
+
+    while (!fin.eof()){
+
+        char str[20];
+        fin.getline(str, 20);
+
+        if(loop++ == 0){
+            char* line_token[10] = {};
+            line_token[0] = strtok(str, " :");
+            nb_vertices = atoi(line_token[0]);
+            for(int i = 0; i< nb_vertices; i++)
+                nodeList.push_back(new Node(i));
+        }
+        if(loop>1 && loop<nodeList.size() + 2){
+            char* line_token[10] = {};
+            line_token[0] = strtok(str, " :");
+            v.push_back(line_token[0]);
+            if (line_token[0]){
+                for (int n = 1; n < 10; n++){
+                    line_token[n] = strtok(0, " :");
+                    if (!line_token[n])
+                        break;
+                    v.push_back(line_token[n]);
+                }
+            }
+            if(v.size()>size +1)
+            {
+                for(int j =1+size; j<v.size(); j++){
+                    string sv;
+                    if(v[j] != NULL)
+                        sv = v[j];
+                    int nb = atoi(sv.c_str());
+                    e.push_back(new TreeEdge(nodeList[num_node], nodeList[nb]));
+                    nodeList[num_node]->add_child(nodeList[nb]);
+                }
+            }
+            size = v.size();
+            num_node++;
+        }
+    }
+
+
+    t->edges = e;
+    t->nodes = nodeList;
+    return t;
+
+}
