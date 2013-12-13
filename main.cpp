@@ -24,13 +24,23 @@ int main()
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(bipartite_graph);
 
-    Graph * graph_with_cover_origin = Graph::generate_graph_with_min_cover(10, 4, 0.25);
+    Graph * graph_with_cover_origin = Graph::generate_graph_with_min_cover(30, 7, 0.25);
     cout << endl << "On génère un graphe avec une couverture de taille 4 à " << graph_with_cover_origin->get_number_of_vertexes() << " sommets." << endl;
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Utils::display_graph(graph_with_cover_origin);
 
     //Algo
-    cout << endl << "Greedy algorithm: " << endl;
+
+    cout << endl << "Parametric algorithm: " << endl;
+    set<int> greedy_cover = Algorithms::parametric_algorithm(graph_with_cover_origin->get_graph_copy(), 8);
+    // If the result is a set containing -1 that mean that the algorithm couldn't find a cover smaller than k
+    cout << "le cover obtenu est : " ;
+    for (set<int>::iterator it = greedy_cover.begin(); it != greedy_cover.end() ; ++it)
+        cout << *it << " ";
+    cout << endl;
+
+
+    /*cout << endl << "Greedy algorithm: " << endl;
     set<Vertex*> greedy_cover = Algorithms::greedy_algorithm(graph_with_cover_origin->get_graph_copy());
 
     cout << endl << "La couverture trouvée par Greedy algorithm est : ";
@@ -45,7 +55,7 @@ int main()
     }
     cout << endl;
 
-    /*cout << endl << "Génération d'un graphe à partir d'un fichier contenant une liste d'adjacence' " << endl;
+    cout << endl << "Génération d'un graphe à partir d'un fichier contenant une liste d'adjacence' " << endl;
     cout << "La liste d'adjacences obtenue est la suivante: " << endl;
     Graph * g = Graph::generate_graph_from_file("../../../Documents/CAA/algo/file");
     Utils::display_graph(g);
