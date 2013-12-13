@@ -83,6 +83,7 @@ int main(int argc,char *argv[])
     else if(argv[1] == std::string("optimal_tree")){
         std::string arg2 = argv[2];
         Tree * tree = Tree::generate_tree(atoi(arg2.c_str()));
+        Utils::display_tree(tree);
         set<Node*> optimal_tree_cover = Algorithms::optimal_tree(tree->get_tree_copy());
         cout << endl << "La couverture est " << endl;
         for (set<Node*>::iterator it = optimal_tree_cover.begin() ; it != optimal_tree_cover.end(); ++it){
