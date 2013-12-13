@@ -21,9 +21,9 @@ public:
     bool exist_edge(Tree t);
     vector<TreeEdge*> get_edges();
     Tree* get_tree_copy();
+    static Tree * generate_tree_from_file(char* filename);
 
 
-private:
     Node* root;
     vector<Node *> nodes;
     vector<TreeEdge *> edges;
