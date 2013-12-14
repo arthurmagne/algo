@@ -107,3 +107,12 @@ bool Utils::detect_cycle(char* filename){
 
       return false;
     }
+
+
+void* Utils::generate_graph_from_file(char* filename){
+
+    if(Utils::detect_cycle(filename))
+        Graph::generate_graph_from_file(filename);
+    else
+        Tree::generate_tree_from_file(filename);
+}

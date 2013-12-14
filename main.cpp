@@ -25,6 +25,13 @@ int main(int argc,char *argv[])
         cout << endl;;
     }
 
+     if (argv[1] == std::string("generate_tree_from_file")){
+         cout << endl << "Génération d'un arbre à partir d'un fichier contenant une liste d'adjacence' " << endl;
+         cout << "La liste d'adjacences obtenue est la suivante: " << endl;
+         Tree * t = Utils::generate_graph_from_file(argv[2]);
+         Utils::display_tree(t);
+     }
+
 
     else if(argv[1] == std::string("greedy_algorithm")){
         Graph* graph_origin = Graph::generate_graph_from_file(argv[2]);

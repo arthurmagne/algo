@@ -25,7 +25,6 @@ public:
 
 
 
-private:
     vector<Vertex *> vertexes;
     vector<Edge *> edges;
 
