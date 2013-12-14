@@ -102,6 +102,47 @@ int main(int argc,char *argv[])
         cout << endl;
     }
 
+    else if(argv[1] == std::string("bi_part_algorithm")){
+        std::string arg2 = argv[2];
+        std::string arg3 = argv[3];
+        /*Graph * test = new Graph();
+           Vertex * v0 = new Vertex(0);
+           Vertex * v1 = new Vertex(1);
+           Vertex * v2 = new Vertex(2);
+           Vertex * v3 = new Vertex(3);
+           Vertex * v4 = new Vertex(4);
+           Vertex * v5 = new Vertex(5);
+
+           v0->add_neighbour(v1);
+           v0->add_neighbour(v3);
+           v0->add_neighbour(v5);
+
+           v1->add_neighbour(v0);
+           v1->add_neighbour(v2);
+           v1->add_neighbour(v4);
+
+           v2->add_neighbour(v1);
+           v3->add_neighbour(v0);
+           v4->add_neighbour(v1);
+           v5->add_neighbour(v0);
+
+           test->get_vertexes().push_back(v0);
+           test->get_vertexes().push_back(v1);
+           test->get_vertexes().push_back(v2);
+           test->get_vertexes().push_back(v3);
+           test->get_vertexes().push_back(v4);
+           test->get_vertexes().push_back(v5);
+           Utils::display_graph(test);*/
+        Graph * bipartite_graph = Graph::generate_bipartite_graph(atoi(arg2.c_str()), atof(arg3.c_str()));
+        Utils::display_graph(bipartite_graph);
+        set<Vertex*> cover_biPart = Algorithms::bi_part_algorithm(bipartite_graph);
+        cout << endl << "La couverture est " << endl;
+        for (set<Vertex*>::iterator it = cover_biPart.begin() ; it != cover_biPart.end(); ++it){
+            cout << (*it)->get_key() ;
+        }
+        cout << endl;
+    }
+
 
     return 0;
 }

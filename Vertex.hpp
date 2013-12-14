@@ -23,6 +23,9 @@ public:
     set<Vertex *>& get_succ();
     set<Vertex *>& get_neighbours();
 
+    Vertex* get_parent();
+    void set_parent(Vertex * parent);
+
 
 
     int key_value;
@@ -30,6 +33,7 @@ public:
     set<Vertex *> pred;// predecesseur pour algo biparti
     set<Vertex *> succ; // successeur pour algo biparti
     int color; // 0=blanc 1=gris 2=noir
+    Vertex* parent;
 
 };
 

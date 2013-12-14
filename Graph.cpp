@@ -212,8 +212,10 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
 
 Graph * Graph::generate_graph_from_file(char* filename){
 
-    if(Utils::detect_cycle(filename))
+  /* if(Utils::detect_cycle(filename))
         cout << "cycle" <<endl;
+        */
+
 
     int num_vert=0;
     vector<char *> v;
