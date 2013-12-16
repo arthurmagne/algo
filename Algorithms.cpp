@@ -278,12 +278,24 @@ set<int> Algorithms::parametric_algorithm(Graph * current_graph, int k){
 
 }
 
-void Algorithms::ford_fulkerson(queue<Vertex*> queue, Vertex* source, Vertex* terminal, set<Vertex*> part_S, set<Vertex*> part_T, int** edge_flow){
+void Algorithms::ford_fulkerson(Vertex* source, Vertex* terminal, set<Vertex*> part_S, set<Vertex*> part_T, int** edge_flow,int ** best_path_flow){
+
+    //creation file
+    queue<Vertex*> queue;
+
     for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
         (*it)->set_color(0);
+        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
+            edge_flow[(*it)->get_key()][(*iter)->get_key()] =
+                    best_path_flow[(*it)->get_key()][(*iter)->get_key()];
+        }
     }
     for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
         (*it)->set_color(0);
+        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
+            edge_flow[(*it)->get_key()][(*iter)->get_key()] =
+                    best_path_flow[(*it)->get_key()][(*iter)->get_key()];
+        }
     }
 
     source->set_color(1);
@@ -298,66 +310,60 @@ void Algorithms::ford_fulkerson(queue<Vertex*> queue, Vertex* source, Vertex* te
             if ((*it)->get_color() == 0 && edge_flow[current->get_key()][(*it)->get_key()] == 0){
                 (*it)->set_color(1);
                 edge_flow[current->get_key()][(*it)->get_key()] = 1;
-                if ((*it) != terminal){
-                 queue.push((*it));
-                }
+                queue.push((*it));
+                (*it)->set_parent(current);
             }
         }
-
         for (set<Vertex*>::iterator it = current->get_pred().begin(); it != current->get_pred().end() ; ++it){
             if ((*it)->get_color() == 0 && edge_flow[(*it)->get_key()][current->get_key()] == 1){
                 (*it)->set_color(1);
                 edge_flow[(*it)->get_key()][current->get_key()] = 0;
-                 if ((*it) != terminal){
-                    queue.push((*it));
-                 }
+                queue.push((*it));
+                (*it)->set_parent(current);
+
             }
         }
         current->set_color(2);
-
     }
 
+    // pour savoir si on relance ou pas
+    if (!queue.empty()){
+        // Garde les flux du chemin améliorant
+        Vertex * start = terminal;
+        while (start != source){
 
-    //test affichage flux//
-    cout << "FLUX APRES" << endl;
-
-   for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*it)->get_key() << "---- " << edge_flow[(*it)->get_key()][(*iter)->get_key()] << " ---->" << (*iter)->get_key() << endl ;
+            if (part_T.find(start->get_parent()) != part_T.end() && part_S.find(start) != part_S.end()){
+                best_path_flow[start->get_key()][start->get_parent()->get_key()] =
+                        edge_flow[start->get_key()][start->get_parent()->get_key()];
+            }
+            else{
+                best_path_flow[start->get_parent()->get_key()][start->get_key()] =
+                        edge_flow[start->get_parent()->get_key()][start->get_key()];
+            }
+            start = start->get_parent();
         }
 
-   }
-
-   for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*it)->get_key() << "---- " << edge_flow[(*it)->get_key()][(*iter)->get_key()] << " ---->" << (*iter)->get_key() << endl ;
+        while (!queue.empty()){
+            queue.pop();;
         }
 
-   }
-    //test//
-   // retour pour savoir si on relance ou pas
-   if (!queue.empty()){
-       while (!queue.empty()){
-           queue.pop();;
-       }
-
-    ford_fulkerson(queue,source,terminal,part_S,part_T,edge_flow);
+        ford_fulkerson(source,terminal,part_S,part_T,edge_flow,best_path_flow);
     }
 
 }
 
 
 set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
-    cout << "on rentre" << endl;
+
+
     //couverture minimale
     set<Vertex*> cover;
     //Sommet des deux parties
     set<Vertex*> part_S;
     set<Vertex*> part_T;
-
-
-
-
+    //stockage des flux / et des flux des chemins améliorants trouvés
+    int ** edge_flow;
+    int ** best_path_flow;
 
     //On stocke le premier sommet dans part_S
     vector<Vertex*> copy_vertex=any_graph->get_vertexes();
@@ -365,19 +371,15 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
 
     //Variable pour savoir si on parcours part_s ou part_T
     int s_or_t = 0;
-    int i=0;
     //Tant que tous les sommets n'ont pas été stocké dans part_T ou part_S
     while (part_S.size()+part_T.size()!= copy_vertex.size() ){
-
 
         if (s_or_t==1){
             //Pour chaque sommet de part_T (on peut ajoutere indice_T qui repartirait que du dernier visité)
             for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-
                 //Pour chaque voisins
                 for (set<Vertex*>::iterator iter = (*it)->get_neighbours().begin(); iter!=(*it)->get_neighbours().end() ; ++iter){
-
-                        part_S.insert(*iter);
+                    part_S.insert(*iter);
                 }
             }
             s_or_t=0;
@@ -385,40 +387,22 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
         else{
             //Pour chaque sommet de part_S
             for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-
                 //Pour chaque voisins
                 for (set<Vertex*>::iterator iter = (*it)->get_neighbours().begin(); iter!=(*it)->get_neighbours().end() ; ++iter){
                     part_T.insert(*iter);
-
                 }
             }
             s_or_t=1;
         }
-
     }
 
     int MAX= part_S.size()+part_T.size()+2;
-
     // Ajout du sommet source
-
     Vertex * source= new Vertex(MAX-1);
     part_S.insert(source);
     // Ajout du sommet terminal
     Vertex * terminal= new Vertex(MAX-2);
     part_T.insert(terminal);
-
-
-    //test//
-    cout << "PART_S" << endl;
-    for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        cout << (*it)->get_key() << endl;
-    }
-    cout << "PART_T" << endl;
-    for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-        cout << (*it)->get_key() << endl;
-    }
-    //test//
-
 
     // Mise à jour des successeur et prédecesseur des sommets
     for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
@@ -434,158 +418,54 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
     }
     // Mise à jour des succ et pred pour t
     for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-         if ((*it) != terminal){//evite d'avoir t comme predecesseur et successeur de t
+        if ((*it) != terminal){//evite d'avoir t comme predecesseur et successeur de t
             (*it)->add_succ(terminal);
             terminal->add_pred(*it);
-         }
-    }
-
-
-    //test//
-    cout << "DEPENDANCE PART S PRED" << endl;
-    for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        cout << (*it)->get_key() << "::";
-        for (set<Vertex*>::iterator iter = (*it)->get_pred().begin(); iter != (*it)->get_pred().end() ; ++iter){
-            cout << (*iter)->get_key() ;
         }
-        cout << endl;
-
     }
-    cout << "DEPENDANCE PART_T PRED" << endl;
-    for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-        cout << (*it)->get_key() << "::";
-        for (set<Vertex*>::iterator iter = (*it)->get_pred().begin(); iter != (*it)->get_pred().end() ; ++iter){
-            cout << (*iter)->get_key() ;
-        }
-        cout << endl;
-
-    }
-    cout << "DEPENDANCE PART S SUCC" << endl;
-    for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        cout << (*it)->get_key() << "::";
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*iter)->get_key() ;
-        }
-        cout << endl;
-
-    }
-    cout << "DEPENDANCE PART_T SUCC" << endl;
-    for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-        cout << (*it)->get_key() << "::";
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*iter)->get_key() ;
-        }
-        cout << endl;
-
-    }
-    //test//
-
     // SOURCE correspondra à la case MAX-1 et TERMINAL corespondra à MAX-2
-    int ** edge_flow;
     edge_flow = new int * [MAX];
     for (int i=0; i<MAX; ++i ){
         edge_flow [i] = new int [MAX];
-      }
+    }
+    best_path_flow = new int * [MAX];
+    for (int i=0; i<MAX; ++i ){
+        best_path_flow [i] = new int [MAX];
+    }
 
+    //Initialisation pour Ford-Fulkerson
     for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
         (*it)->set_color(0);
         for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-           /* Edge * edge= new Edge((*it),(*iter));
-            edge->set_flow(0);
-            edge_color.insert(edge);*/
             edge_flow[(*it)->get_key()][(*iter)->get_key()] = 0;
-
+            best_path_flow[(*it)->get_key()][(*iter)->get_key()] = 0;
         }
-
     }
     for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
         (*it)->set_color(0);
         for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            /*Edge * edge= new Edge((*it),(*iter));
-            edge->set_flow(0);
-            edge_color.insert(edge);*/
             edge_flow[(*it)->get_key()][(*iter)->get_key()] = 0;
+            best_path_flow[(*it)->get_key()][(*iter)->get_key()] = 0;
         }
     }
 
+    ford_fulkerson(source,terminal,part_S,part_T,edge_flow,best_path_flow);
 
-    //test affichage flux//
-    cout << "FLUX" << endl;
-
-   for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*it)->get_key() << "---- " << edge_flow[(*it)->get_key()][(*iter)->get_key()] << " ---->" << (*iter)->get_key() << endl ;
-        }
-
-   }
-
-   for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*it)->get_key() << "---- " << edge_flow[(*it)->get_key()][(*iter)->get_key()] << " ---->" << (*iter)->get_key() << endl ;
-        }
-
-   }
-    //test//
-
-
-
-    //creation file et ajout de s + couleur à gris
-    queue<Vertex*> queue;
-
-    ford_fulkerson(queue,source,terminal,part_S,part_T,edge_flow);
-
-
-
-
-    //test affichage flux//
-    cout << "FLUX APRES" << endl;
-
-   for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*it)->get_key() << "---- " << edge_flow[(*it)->get_key()][(*iter)->get_key()] << " ---->" << (*iter)->get_key() << endl ;
-        }
-
-   }
-
-   for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-        for (set<Vertex*>::iterator iter = (*it)->get_succ().begin(); iter != (*it)->get_succ().end() ; ++iter){
-            cout << (*it)->get_key() << "---- " << edge_flow[(*it)->get_key()][(*iter)->get_key()] << " ---->" << (*iter)->get_key() << endl ;
-        }
-
-   }
-    //test//
-   // retour pour savoir si on relance ou pas
-   if (!queue.empty()){
-    ford_fulkerson(queue,source,terminal,part_S,part_T,edge_flow);
-    }
-
-
-
-    //test couleur//
-    for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
-        cout<<(*it)->get_key() << ":::" <<(*it)->get_color() << endl;
-    }
-    for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
-         cout<<(*it)->get_key() << ":::" <<(*it)->get_color() << endl;
-    }
-     //test couleur//
-
+    //Calcul de la couverture
     for (set<Vertex*>::iterator it = part_T.begin(); it != part_T.end() ; ++it){
         if ((*it)->get_color() == 2){
             cover.insert(*it);
         }
     }
-
     for (set<Vertex*>::iterator it = part_S.begin(); it != part_S.end() ; ++it){
         if ((*it)->get_color() == 0){
             cover.insert(*it);
         }
     }
 
+    //SUpprime s et t de la couverture
     cover.erase(source);
     cover.erase(terminal);
-
-
 
     return cover;
 }

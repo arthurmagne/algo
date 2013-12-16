@@ -51,6 +51,14 @@ set<Vertex *> &Vertex::get_succ(){
     return this->succ;
 }
 
+Vertex* Vertex::get_parent(){
+    return this->parent;
+}
+
+void Vertex::set_parent(Vertex * parent){
+     this->parent = parent;
+}
+
 void Vertex::display_neighbours(){
     for (set<Vertex*>::iterator it = this->neighbours.begin() ; it != this->neighbours.end(); ++it)
         cout << (*it)->get_key() << " ";
