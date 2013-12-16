@@ -642,7 +642,7 @@ set<Vertex*> Algorithms::bi_part_algorithm(Graph *any_graph){
 }*/
 
 
-/*
+
 std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
     std::vector<Vertex*> cover;
@@ -671,7 +671,7 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
 
     return cover;
 }
-*/
+
 
 std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector<Vertex*> s, Vertex* current, Vertex* prec, std::vector<int> keys){
     bool minChanged = false;
