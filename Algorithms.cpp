@@ -131,7 +131,7 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
         if(current->get_parent()!=NULL){
             current=current->get_parent();
             cover.insert(current);
-            cout << endl << "couverture:"<< current->get_key() << endl;
+
 
              //On supprime les aretes fils-père
              for (set<Node*>::iterator it = current->get_children().begin() ; it != current->get_children().end(); ++it){
@@ -614,6 +614,230 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector
 
 }
 
+void Algorithms::reduction_SAT(Graph *any_graph,int couverture){
+    int facteur =10;
+    if (couverture>9){
+        facteur*=10;
+    }
+    if (couverture>99){
+        facteur*=10;
+    }
+    if (couverture>999){
+        facteur*=10;
+    }
+
+
+
+
+
+
+
+
+    int siz_phi1 = 0;
+    for (int c =couverture-1; c>0;--c){
+        siz_phi1 +=c;
+    }
+    int siz_phi2 = 0;
+    for (int d =any_graph->get_number_of_vertexes()-1; d>0;--d){
+        siz_phi2 +=d;
+    }
+
+
+    int number_clauses = ((siz_phi1)*any_graph->get_number_of_vertexes()) +
+            ((siz_phi2)*couverture) +
+            any_graph->get_edges_copy().size();
+    int number_variables = couverture * any_graph->get_number_of_vertexes();
+
+    int test_clause = 0;
+
+    ofstream fichier("fichier_pour_minisat.txt", ios::out | ios::trunc);  // ouverture en écriture avec effacement du fichier ouvert
+
+    fichier << "p cnf " << number_variables << " " << number_clauses << endl;
+
+    //Tableau des variables
+    // 11 : sommmet 1 a la 1ere place
+
+    int* var_tab = new int[(couverture * any_graph->get_number_of_vertexes())+1];
+
+    int pos=0;
+
+    for (vector<Vertex*>::iterator it =any_graph->get_vertexes().begin(); it !=any_graph->get_vertexes().end() ; ++it){
+        for (int j=1; j<couverture+1; ++j){
+            var_tab[pos]= (((*it)->get_key())+1)*facteur +j;
+            pos++;
+        }
+    }
+    //stockage du facteur
+    var_tab[(couverture * any_graph->get_number_of_vertexes())] = facteur;
+
+    ofstream tableau("correspondance_tab.txt", ios::out | ios::trunc);
+    for (int i =0; i<couverture * any_graph->get_number_of_vertexes(); ++i){
+        tableau << var_tab[i] << endl;
+    }
+    tableau << var_tab[couverture * any_graph->get_number_of_vertexes()] << endl;
+    tableau.close();
+
+
+    //TEST
+    for (int test=0; test <couverture * any_graph->get_number_of_vertexes(); ++test){
+        cout << "Case : " << test << " --> " << var_tab[test] << endl;
+    }
+    //TEST
+
+    int x_ik;
+    int x_il;
+    for (int i=1; i < any_graph->get_number_of_vertexes()+1;++i){
+        for (int k=1; k<couverture ; ++k){//faire un tableau avec num variable -> correspondance
+            for (int l=k+1; l< couverture+1;++l){
+                for (int m=0;m<couverture * any_graph->get_number_of_vertexes();m++){
+                    if (var_tab[m]==i*facteur + k){
+                        x_ik = m+1;
+                    }
+                    if (var_tab[m]==i*facteur + l){
+                        x_il= m+1;
+                    }
+                }
+                fichier << "-" << x_ik << " -" << x_il << " 0" << endl;
+                test_clause++;
+            }
+        }
+
+    }
+    int x_jk;
+    for (int k=1; k < couverture+1;++k){
+        for (int i=1; i<any_graph->get_number_of_vertexes(); ++i){//faire un tableau avec num variable -> correspondance
+            for (int j=i+1; j<any_graph->get_number_of_vertexes()+1; ++j){
+                for (int m=0;m<couverture * any_graph->get_number_of_vertexes();m++){
+                    if (var_tab[m]==i*facteur + k){
+                        x_ik = m+1;
+                    }
+                    if (var_tab[m]==j*facteur + k){
+                        x_jk= m+1;
+                    }
+                }
+                fichier << "-" << x_ik << " -" << x_jk << " 0" << endl;
+                test_clause++;
+            }
+        }
+
+
+    }
+
+
+    for (vector<Edge*>::iterator it =any_graph->get_edges_copy().begin(); it !=any_graph->get_edges_copy().end() ; ++it){
+        for (int k=1; k < couverture+1;++k){
+            for (int m=0;m<couverture * any_graph->get_number_of_vertexes();m++){
+                if (var_tab[m]==(((*it)->get_vertex1()->get_key())+1)*facteur + k){
+                        x_ik = m+1;
+                    }
+                    if (var_tab[m]==(((*it)->get_vertex2()->get_key())+1)*facteur + k){
+                        x_jk= m+1;
+                    }
+                }
+            fichier << x_ik << " " << x_jk << " ";
+
+
+            }
+         test_clause++;
+         fichier << "0" << endl;
+        }
+
+
+    cout << "Facteur :: "<<facteur << endl;
+    fichier.close();
+
+}
+
+
+set<int> Algorithms::find_cover_minisat(char* corresp_tab,char * output_minisat){
+
+    //get file in tab
+    int size_tab;
+    string line;
+    ifstream tab_file(corresp_tab, ios::in);
+    while (getline(tab_file, line)){
+        size_tab++;
+    }
+    tab_file.close();
+    int * vertex_index= new int[size_tab];
+    ifstream tab_file2(corresp_tab, ios::in);
+    line.clear();
+    int index=0;
+    while (getline(tab_file2, line)){
+        vertex_index[index] = atoi(line.c_str());
+        index++;
+    }
+    tab_file2.close();
+    int facteur = vertex_index[size_tab-1];
+
+
+    set<int> cover;
+    string content;
+    string content_number;
+    char c = '-';
+    ifstream file(output_minisat, ios::in);
+    getline(file, content);
+
+    if (content == "UNSAT"){
+        cout << "NO MIN COVER FOR THIS SIZE" << endl;
+    }
+    else if(content == ""){
+        cout << "ERROR FILE" << endl;
+    }
+    else if(content == "SAT"){
+    getline(file,content_number);
+    bool cont = true;
+    int i =0;
+    while (cont){
+
+
+        if (content_number.at(i) == c){
+
+
+            i+=1;
+            while (content_number.at(i) == '0' || content_number.at(i) == '1'
+                   || content_number.at(i) == '2' || content_number.at(i) =='3'
+                        || content_number.at(i) == '4' || content_number.at(i) == '5'
+                        || content_number.at(i) == '6' || content_number.at(i) == '7'
+                        || content_number.at(i) == '8' || content_number.at(i) == '9'){
+
+                i+=1;
+            }
+            i++;
+        }
+        else{
+
+            int indice = atoi(&content_number.at(i));
+
+
+            i++;
+            while (content_number.at(i) == '0' || content_number.at(i) == '1'
+                   || content_number.at(i) == '2' || content_number.at(i) =='3'
+                        || content_number.at(i) == '4' || content_number.at(i) == '5'
+                        || content_number.at(i) == '6' || content_number.at(i) == '7'
+                        || content_number.at(i) == '8' || content_number.at(i) == '9'){
+                i++;
+            }
+            i++;
+
+            cover.insert((vertex_index[indice-1]/facteur)-1);
+
+        }
+
+        if (content_number.at(i) == '0'){
+
+            cont =false;
+     }
+    }
+}
+
+
+
+    file.close();
+
+    return cover;
+
+}
 
 
 

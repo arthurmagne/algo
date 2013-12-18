@@ -7,8 +7,11 @@
 
 using namespace std;
 
+
 int main(int argc,char *argv[])
 {
+
+
     if(argc < 2){
         cout << "not enough arguments, usage: [algorithm_name][file_path]" << endl;
         cout << "[algorithm_name][size_graph][probability]" << endl;
@@ -28,8 +31,8 @@ int main(int argc,char *argv[])
      if (argv[1] == std::string("generate_tree_from_file")){
          cout << endl << "Génération d'un arbre à partir d'un fichier contenant une liste d'adjacence' " << endl;
          cout << "La liste d'adjacences obtenue est la suivante: " << endl;
-         Tree * t = Utils::generate_graph_from_file(argv[2]);
-         Utils::display_tree(t);
+         //Tree * t = Utils::generate_graph_from_file(argv[2]);
+         //Utils::display_tree(t);
      }
 
 
@@ -49,6 +52,7 @@ int main(int argc,char *argv[])
         cout << endl << "On génère un graphe à " << graph_origin->get_number_of_vertexes() << " sommets." << endl;
         cout << "La liste d'adjacences obtenue est la suivante: " << endl;
         Utils::display_graph(graph_origin);
+
     }
 
     else if(argv[1] == std::string("generate_tree")){
@@ -94,8 +98,9 @@ int main(int argc,char *argv[])
         set<Node*> optimal_tree_cover = Algorithms::optimal_tree(tree->get_tree_copy());
         cout << endl << "La couverture est " << endl;
         for (set<Node*>::iterator it = optimal_tree_cover.begin() ; it != optimal_tree_cover.end(); ++it){
-            cout << (*it)->get_key() ;
+            cout << (*it)->get_key() << " " ;
         }
+        cout << endl << "La taille de la couverture est : " << endl << optimal_tree_cover.size();
         cout << endl << "Fin optimal tree" << endl;
         cout << endl;
     }
@@ -149,6 +154,41 @@ int main(int argc,char *argv[])
         }
         cout << endl;
     }
+
+
+
+     else if(argv[1] == std::string("reduction_sat")){
+
+            cout << "AVANT" << endl;
+            Graph * graph = Graph::generate_graph(10,0.5);
+            Utils::display_graph(graph);
+            Algorithms::reduction_SAT(graph,8);
+
+
+
+
+            cout << "REDUCTION" << endl;
+     }
+
+     else if(argv[1] == std::string("find_cover_minisat")){
+
+
+
+
+             set <int> cover = Algorithms::find_cover_minisat(argv[2],argv[3]);
+             cout << "La couverture est :" << endl;
+           for (set<int>::iterator it = cover.begin() ; it != cover.end(); ++it){
+           cout << (*it) << " - " ;
+           }
+           cout << endl;
+
+
+
+
+    }
+
+
+
 
 
     return 0;

@@ -29,6 +29,8 @@ public:
     static std::vector<Vertex*> two_aprox_first_depth(Graph* g);
     static std::vector<Vertex*> two_aprox_first_depth_rec(Graph * g, std::vector<Vertex*> s, Vertex* current, Vertex* prec, std::vector<int> keys);
 
+    static void reduction_SAT(Graph *any_graph, int couverture);
+    static set<int> find_cover_minisat(char* corresp_tab,char * output_minisat);
 };
 
 #endif // ALGORITHMS_HPP
