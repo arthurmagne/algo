@@ -14,6 +14,8 @@ using std::ifstream;
 
 using namespace std;
 
+#define BUFFER_LENGTH 10000
+
 Graph::Graph()
 {
 }
@@ -211,11 +213,8 @@ Graph* Graph::generate_graph_with_min_cover(int number_of_vertexes, int cover_si
 
 
 
-Graph * Graph::generate_graph_from_file(char* filename){
-        /* if(Utils::detect_cycle(filename))
-              cout << "cycle" <<endl;
-              */
 
+Graph * Graph::generate_graph_from_file(char* filename){
 
     int num_vert=0;
     vector<char *> v;
@@ -229,11 +228,11 @@ Graph * Graph::generate_graph_from_file(char* filename){
     int nb_vertices = 0;
     /* Chaque tour de boucle correspond à une ligne du document texte contenant la liste d'adjacence*/
     while (!fin.eof()){
-        char str[20];
-        fin.getline(str, 20);
+        char str[BUFFER_LENGTH];
+        fin.getline(str, BUFFER_LENGTH);
         /* Premier tour de boucle, on recupere le nombre de sommets*/
         if(loop++ == 0){
-            char* line_token[10] = {};
+            char* line_token[BUFFER_LENGTH] = {};
             line_token[0] = strtok(str, " :");
             nb_vertices = atoi(line_token[0]);
             /* On cree les sommets du graphe*/
@@ -243,11 +242,11 @@ Graph * Graph::generate_graph_from_file(char* filename){
 
         /* Deuxieme tour de boucle on récupère la liste d'adjacence ligne par ligne*/
         if(loop>1 && loop<ver.size() + 2){
-            char* line_token[10] = {};
+            char* line_token[BUFFER_LENGTH] = {};
             line_token[0] = strtok(str, " :");
             v.push_back(line_token[0]);
             if (line_token[0]){
-                for (int n = 1; n < 10; n++){
+                for (int n = 1; n < BUFFER_LENGTH; n++){
                     line_token[n] = strtok(0, " :");
                     if (!line_token[n])
                         break;
@@ -277,7 +276,6 @@ Graph * Graph::generate_graph_from_file(char* filename){
     g->vertexes = ver;
     return g;
 }
-
 
 
 
