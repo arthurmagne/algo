@@ -156,6 +156,8 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
 // le cover est à dupliquer à chaque nouvel appel comme le graph
 set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> current_cover, int cpt, int k){
+    if ((cpt == 0) && (k > any_graph->get_number_of_vertexes()))
+        k = any_graph->get_number_of_vertexes();
     //cout << "la fonction est appelée avec cpt: " << cpt << "any_graph" << endl;
     //Utils::display_graph(any_graph);
     bool has_edges = false;
