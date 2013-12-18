@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdlib.h>
+#include <time.h>
 #include "Tree.hpp"
 #include "Utils.hpp"
 #include "Graph.hpp"
@@ -9,6 +10,7 @@ using namespace std;
 
 int main(int argc,char *argv[])
 {
+    /*
     if(argc < 2){
         cout << "not enough arguments, usage: [algorithm_name][file_path]" << endl;
         cout << "[algorithm_name][size_graph][probability]" << endl;
@@ -140,7 +142,7 @@ int main(int argc,char *argv[])
            test->get_vertexes().push_back(v4);
            test->get_vertexes().push_back(v5);
            Utils::display_graph(test);*/
-        Graph * bipartite_graph = Graph::generate_bipartite_graph(atoi(arg2.c_str()), atof(arg3.c_str()));
+        /*Graph * bipartite_graph = Graph::generate_bipartite_graph(atoi(arg2.c_str()), atof(arg3.c_str()));
         Utils::display_graph(bipartite_graph);
         set<Vertex*> cover_biPart = Algorithms::bi_part_algorithm(bipartite_graph);
         cout << endl << "La couverture est " << endl;
@@ -148,7 +150,163 @@ int main(int argc,char *argv[])
             cout << (*it)->get_key() ;
         }
         cout << endl;
+    }*/
+
+     /* perf tests */
+    set<int> testSuite;
+    testSuite.insert(10);
+    testSuite.insert(50);
+    testSuite.insert(100);
+    testSuite.insert(130);
+    testSuite.insert(1000);
+    testSuite.insert(3000);
+
+    /*for (set<int>::iterator it = testSuite.begin(); it != testSuite.end(); ++it){
+        Graph* graph_origin = Graph::generate_graph(*it, 0.25);
+         int start = clock();
+        Algorithms::greedy_algorithm(graph_origin);
+         int end = clock();
+         std::cout << "for " << *it << "vertexes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
+
     }
+
+
+
+    for (set<int>::iterator it = testSuite.begin(); it != testSuite.end(); ++it){
+        Tree* tree_origin = Tree::generate_tree(*it);
+
+         int start = clock();
+        Algorithms::Algorithms::optimal_tree(tree_origin);
+        cout << "on rentre" << endl;
+
+         int end = clock();
+         std::cout << "for " << *it << "nodes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
+
+    }
+
+
+
+    for (set<int>::iterator it = testSuite.begin(); it != testSuite.end(); ++it){
+        Graph* graph_origin = Graph::generate_bipartite_graph(*it, 0.25);
+         int start = clock();
+        Algorithms::bi_part_algorithm(graph_origin);
+         int end = clock();
+         std::cout << "for " << *it << "vertexes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
+
+    }
+
+    for (set<int>::iterator it = testSuite.begin(); it != testSuite.end(); ++it){
+        Graph* graph_origin = Graph::generate_graph(*it, 0.25);
+         int start = clock();
+        Algorithms::two_aprox_first_depth(graph_origin);
+         int end = clock();
+         std::cout << "for " << *it << "vertexes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
+
+    }
+
+    for (set<int>::iterator it = testSuite.begin(); it != testSuite.end(); ++it){
+        Graph* graph_origin = Graph::generate_graph(*it, 0.25);
+         int start = clock();
+        Algorithms::two_aprox_algorithm(graph_origin);
+         int end = clock();
+         std::cout << "for " << *it << "vertexes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
+
+    }
+
+    for (set<int>::iterator it = testSuite.begin(); it != testSuite.end(); ++it){
+        Graph* graph_origin = Graph::generate_graph_with_min_cover(*it, *it/3, 0.25);
+         int start = clock();
+        Algorithms::parametric_algorithm(graph_origin,*it/3);
+         int end = clock();
+         std::cout << "for " << *it << "vertexes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
+
+    }*/
+
+    Graph * test = new Graph();
+    std::vector<Edge *> edges;
+    std::vector<Vertex *> vertex;
+    Vertex* v1 = new Vertex(0);
+    Vertex* v2 = new Vertex(1);
+    Vertex* v3 = new Vertex(2);
+    Vertex* v4 = new Vertex(3);
+    Vertex* v5 = new Vertex(4);
+    Vertex* v6 = new Vertex(5);
+    Vertex* v7 = new Vertex(6);
+    Vertex* v8 = new Vertex(7);
+    Vertex* v9 = new Vertex(8);
+    Vertex* v10 = new Vertex(9);
+    Vertex* v11 = new Vertex(10);
+    v1->add_neighbour(v2);
+    v1->add_neighbour(v3);
+    edges.push_back(new Edge(v1, v2));
+    edges.push_back(new Edge(v1, v3));
+    v2->add_neighbour(v1);
+    v2->add_neighbour(v3);
+    v2->add_neighbour(v4);
+    edges.push_back(new Edge(v2, v1));
+    edges.push_back(new Edge(v2, v3));
+    edges.push_back(new Edge(v2, v4));
+    v3->add_neighbour(v1);
+    v3->add_neighbour(v2);
+    v3->add_neighbour(v4);
+    edges.push_back(new Edge(v3, v1));
+    edges.push_back(new Edge(v3, v2));
+    edges.push_back(new Edge(v3, v4));
+    v4->add_neighbour(v3);
+    v4->add_neighbour(v2);
+    edges.push_back(new Edge(v4, v3));
+    edges.push_back(new Edge(v4, v2));
+    v5->add_neighbour(v6);
+    v5->add_neighbour(v7);
+    edges.push_back(new Edge(v5, v6));
+    edges.push_back(new Edge(v5, v7));
+    v6->add_neighbour(v5);
+    v6->add_neighbour(v7);
+    v6->add_neighbour(v8);
+    edges.push_back(new Edge(v6, v5));
+    edges.push_back(new Edge(v6, v7));
+    edges.push_back(new Edge(v6, v8));
+    v7->add_neighbour(v5);
+    v7->add_neighbour(v6);
+    v7->add_neighbour(v8);
+    edges.push_back(new Edge(v7, v5));
+    edges.push_back(new Edge(v7, v6));
+    edges.push_back(new Edge(v7, v8));
+    v8->add_neighbour(v7);
+    v8->add_neighbour(v6);
+    v8->add_neighbour(v9);
+    edges.push_back(new Edge(v8, v7));
+    edges.push_back(new Edge(v8, v6));
+    edges.push_back(new Edge(v8, v9));
+    v9->add_neighbour(v8);
+    v9->add_neighbour(v10);
+    edges.push_back(new Edge(v9, v8));
+    edges.push_back(new Edge(v9, v10));
+    v10->add_neighbour(v8);
+    edges.push_back(new Edge(v10, v8));
+    vertex.push_back(v1);
+    vertex.push_back(v2);
+    vertex.push_back(v3);
+    vertex.push_back(v4);
+    vertex.push_back(v5);
+    vertex.push_back(v6);
+    vertex.push_back(v7);
+    vertex.push_back(v8);
+    vertex.push_back(v9);
+    vertex.push_back(v10);
+    vertex.push_back(v11);
+    test->vertexes = vertex;
+    test->edges = edges;
+    Utils::display_graph(test);
+    //Utils::display_graph(para);
+    set<int> cover = Algorithms::parametric_algorithm(test, 17);
+    for (set<int>::iterator it = cover.begin() ; it != cover.end(); ++it){
+       cout << *it << " ";
+    }
+    cout << endl;
+
+
+
 
 
     return 0;
