@@ -131,7 +131,11 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
         if(current->get_parent()!=NULL){
             current=current->get_parent();
             cover.insert(current);
+<<<<<<< HEAD
             //cout << endl << "couverture:"<< current->get_key() << endl;
+=======
+
+>>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
 
              //On supprime les aretes fils-père
              for (set<Node*>::iterator it = current->get_children().begin() ; it != current->get_children().end(); ++it){
@@ -156,10 +160,13 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
 // le cover est à dupliquer à chaque nouvel appel comme le graph
 set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> current_cover, int cpt, int k){
+<<<<<<< HEAD
     if ((cpt == 0) && (k > any_graph->get_number_of_vertexes()))
         k = any_graph->get_number_of_vertexes();
     //cout << "la fonction est appelée avec cpt: " << cpt << "any_graph" << endl;
     //Utils::display_graph(any_graph);
+=======
+>>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
     bool has_edges = false;
     for (vector<Vertex*>::iterator it = any_graph->get_iterator_begin(); it != any_graph->get_iterator_end() ; ++it){
         if ((*it)->get_number_of_neighbours() != 0){
@@ -168,7 +175,6 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
         }
 
     }
-
     // we didn't find a cover
     if (cpt >= k){
         set<int> error;
@@ -179,8 +185,8 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
     // we find a cover
     if (!has_edges){
         return current_cover;
-    }
 
+    }
     set<int> cover_left = current_cover;
     set<int> cover_right = current_cover;
 
@@ -193,7 +199,7 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
 
     // create a new graph
     Graph * graph_left = any_graph->get_graph_copy();
-
+    Utils::display_graph(graph_left);
     //find max_degree in this graph
     Vertex* max_degree_left = graph_left->get_vertexes().at(0);
     for (vector<Vertex*>::iterator it = graph_left->get_iterator_begin(); it != graph_left->get_iterator_end() ; ++it){
@@ -203,13 +209,18 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
     cover_left.insert(max_degree_left->get_key());
     // remove all edges incident to max_degree
     // remove the covered edges
-    for (set<Vertex*>::iterator it = max_degree_left->get_neighbours().begin() ; it != max_degree_left->get_neighbours().end(); ++it){
-        (*it)->get_neighbours().erase(max_degree_left);
+    for (set<Vertex*>::iterator it = max_degree_left->neighbours.begin() ; it != max_degree_left->neighbours.end(); ++it){
+        (*it)->neighbours.erase(max_degree_left);
     }
     // remove all edges from max_degree node
+<<<<<<< HEAD
     max_degree_left->get_neighbours().clear();
     //cout << "graph_left" << endl;
     //Utils::display_graph(graph_left);
+=======
+    max_degree_left->neighbours.clear();
+
+>>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
     // launch this function
     set<int> result_left = parametric_algorithm_impl(graph_left, cover_left, ++cpt, k);
 
@@ -220,6 +231,7 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
     **/
 
     Graph * graph_right = any_graph->get_graph_copy();
+    Utils::display_graph(graph_right);
     //find max_degree in this graph
     Vertex* max_degree_right = graph_right->get_vertexes().at(0);
     for (vector<Vertex*>::iterator it = graph_right->get_iterator_begin(); it != graph_right->get_iterator_end() ; ++it){
@@ -227,39 +239,52 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
             max_degree_right = (*it);
     }
     // remove the covered edges
+<<<<<<< HEAD
     for (set<Vertex*>::iterator it = max_degree_right->get_neighbours().begin() ; it != max_degree_right->get_neighbours().end(); ++it){
         (*it)->get_neighbours().erase(max_degree_right);
     }
     // remove all edges from max_degree node
     max_degree_right->get_neighbours().clear();
+=======
+    for (set<Vertex*>::iterator it = max_degree_left->neighbours.begin() ; it != max_degree_left->neighbours.end(); ++it){
+        (*it)->neighbours.erase(max_degree_left);
+    }
+    // remove all edges from max_degree node
+    max_degree_left->neighbours.clear();
+>>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
 
     set<Vertex*>::iterator tmp;
 
-    for (set<Vertex*>::iterator current = max_degree_right->get_neighbours().begin(); current != max_degree_right->get_neighbours().end() ; ){
+    for (set<Vertex*>::iterator current = max_degree_right->neighbours.begin(); current != max_degree_right->neighbours.end() ; ){
         // faire un second for !
         cover_right.insert((*current)->get_key());
         Vertex* vertex_tmp = (*current);
 
-        for (set<Vertex*>::iterator it = (*current)->get_neighbours().begin(); it != (*current)->get_neighbours().end() ; ++it){
 
+        for (set<Vertex*>::iterator it = (*current)->neighbours.begin(); it != (*current)->neighbours.end() ; ++it){
             // remove all edges from this neighbour
             // remove it from the other side
 
             if ((*it)->get_key() == max_degree_right->get_key()){
                 tmp = current;
                 ++tmp;
-                (*it)->get_neighbours().erase(vertex_tmp);
+                (*it)->neighbours.erase(vertex_tmp);
             }else{
-                (*it)->get_neighbours().erase(vertex_tmp);
+                (*it)->neighbours.erase(vertex_tmp);
             }
 
-
         }
+<<<<<<< HEAD
         (vertex_tmp)->get_neighbours().clear();
 
         //cout << "graph_right" << endl;
         //Utils::display_graph(graph_right);
+=======
+        (vertex_tmp)->neighbours.clear();
+
+>>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
         current = tmp;
+
 
     }
 
@@ -536,24 +561,31 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth(Graph* g){
     std::vector<Vertex*> list = g->get_vertexes();
     std::vector<int> keys;
 
-       Vertex* current;
-       Vertex* root = list[0];
-       int i;
+    Vertex* current;
+    Vertex* root = list[0];
 
-       while(i != g->get_number_of_vertexes()){
-           for(i=0; i<cover.size(); i++)
-               if(list[i]->get_key() == cover[i]->get_key())
-                   ;
+    while(cover.size() != g->get_number_of_vertexes()){
 
-           current = list[i];
-           if(i<g->get_number_of_vertexes())
-            cover = two_aprox_first_depth_rec(g, cover, current, NULL, keys);
-       }
+        bool found;
+        for(int j=0; j<g->get_number_of_vertexes(); j++){
+            found = false;
+            for(int k=0; k<cover.size(); k++){
+                if(cover[k]->get_key() == j)
+                    found = true;
+            }
+            if(!found){
+                current = list[j];
+                break;
+            }
+        }
 
+        cover = two_aprox_first_depth_rec(g, cover, current, NULL, keys);
 
-       for(int j=0; j<cover.size(); j++)
-           if(cover[j]->get_number_of_neighbours() < 2 && cover[j]->get_key() != root->get_key())
-               cover.erase(cover.begin()+j);
+    }
+
+    for(int j=0; j<cover.size(); j++)
+        if(cover[j]->get_number_of_neighbours() < 2 && cover[j]->get_number_of_neighbours() > 0 && cover[j]->get_key() != root->get_key())
+            cover.erase(cover.begin()+j);
 
 
     return cover;
@@ -567,6 +599,7 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector
     if(prec != NULL)
         newVertex->add_neighbour(new Vertex(prec->get_key()));
     s.push_back(newVertex);
+    keys.push_back(newVertex->get_key());
 
 
     Vertex* nextVertex;
@@ -585,7 +618,6 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector
                 minChanged = true;
             }
 
-
             if (((*it)->get_key() < min) && ((find(keys.begin(), keys.end(),(*it)->get_key())) == keys.end())){
                 min = (*it)->get_key();
                 nextVertex = (*it);
@@ -595,16 +627,13 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector
 
         }
 
-        if(minChanged == true)
-            keys.push_back(newVertex->get_key());
-
-
-        if(minChanged == false)
+        if(minChanged == false){
             return s;
-
+        }
         Vertex* newNeighbour = new Vertex(min);
         newVertex->add_neighbour(newNeighbour);
         s = two_aprox_first_depth_rec(g, s, nextVertex, newVertex, keys);
+        min = g->get_number_of_vertexes();
 
 
         std::vector<int> keys2;
@@ -621,6 +650,230 @@ std::vector<Vertex*> Algorithms::two_aprox_first_depth_rec(Graph* g, std::vector
 
 }
 
+void Algorithms::reduction_SAT(Graph *any_graph,int couverture){
+    int facteur =10;
+    if (couverture>9){
+        facteur*=10;
+    }
+    if (couverture>99){
+        facteur*=10;
+    }
+    if (couverture>999){
+        facteur*=10;
+    }
+
+
+
+
+
+
+
+
+    int siz_phi1 = 0;
+    for (int c =couverture-1; c>0;--c){
+        siz_phi1 +=c;
+    }
+    int siz_phi2 = 0;
+    for (int d =any_graph->get_number_of_vertexes()-1; d>0;--d){
+        siz_phi2 +=d;
+    }
+
+
+    int number_clauses = ((siz_phi1)*any_graph->get_number_of_vertexes()) +
+            ((siz_phi2)*couverture) +
+            any_graph->get_edges_copy().size();
+    int number_variables = couverture * any_graph->get_number_of_vertexes();
+
+    int test_clause = 0;
+
+    ofstream fichier("fichier_pour_minisat.txt", ios::out | ios::trunc);  // ouverture en écriture avec effacement du fichier ouvert
+
+    fichier << "p cnf " << number_variables << " " << number_clauses << endl;
+
+    //Tableau des variables
+    // 11 : sommmet 1 a la 1ere place
+
+    int* var_tab = new int[(couverture * any_graph->get_number_of_vertexes())+1];
+
+    int pos=0;
+
+    for (vector<Vertex*>::iterator it =any_graph->get_vertexes().begin(); it !=any_graph->get_vertexes().end() ; ++it){
+        for (int j=1; j<couverture+1; ++j){
+            var_tab[pos]= (((*it)->get_key())+1)*facteur +j;
+            pos++;
+        }
+    }
+    //stockage du facteur
+    var_tab[(couverture * any_graph->get_number_of_vertexes())] = facteur;
+
+    ofstream tableau("correspondance_tab.txt", ios::out | ios::trunc);
+    for (int i =0; i<couverture * any_graph->get_number_of_vertexes(); ++i){
+        tableau << var_tab[i] << endl;
+    }
+    tableau << var_tab[couverture * any_graph->get_number_of_vertexes()] << endl;
+    tableau.close();
+
+
+    //TEST
+    for (int test=0; test <couverture * any_graph->get_number_of_vertexes(); ++test){
+        cout << "Case : " << test << " --> " << var_tab[test] << endl;
+    }
+    //TEST
+
+    int x_ik;
+    int x_il;
+    for (int i=1; i < any_graph->get_number_of_vertexes()+1;++i){
+        for (int k=1; k<couverture ; ++k){//faire un tableau avec num variable -> correspondance
+            for (int l=k+1; l< couverture+1;++l){
+                for (int m=0;m<couverture * any_graph->get_number_of_vertexes();m++){
+                    if (var_tab[m]==i*facteur + k){
+                        x_ik = m+1;
+                    }
+                    if (var_tab[m]==i*facteur + l){
+                        x_il= m+1;
+                    }
+                }
+                fichier << "-" << x_ik << " -" << x_il << " 0" << endl;
+                test_clause++;
+            }
+        }
+
+    }
+    int x_jk;
+    for (int k=1; k < couverture+1;++k){
+        for (int i=1; i<any_graph->get_number_of_vertexes(); ++i){//faire un tableau avec num variable -> correspondance
+            for (int j=i+1; j<any_graph->get_number_of_vertexes()+1; ++j){
+                for (int m=0;m<couverture * any_graph->get_number_of_vertexes();m++){
+                    if (var_tab[m]==i*facteur + k){
+                        x_ik = m+1;
+                    }
+                    if (var_tab[m]==j*facteur + k){
+                        x_jk= m+1;
+                    }
+                }
+                fichier << "-" << x_ik << " -" << x_jk << " 0" << endl;
+                test_clause++;
+            }
+        }
+
+
+    }
+
+
+    for (vector<Edge*>::iterator it =any_graph->get_edges_copy().begin(); it !=any_graph->get_edges_copy().end() ; ++it){
+        for (int k=1; k < couverture+1;++k){
+            for (int m=0;m<couverture * any_graph->get_number_of_vertexes();m++){
+                if (var_tab[m]==(((*it)->get_vertex1()->get_key())+1)*facteur + k){
+                        x_ik = m+1;
+                    }
+                    if (var_tab[m]==(((*it)->get_vertex2()->get_key())+1)*facteur + k){
+                        x_jk= m+1;
+                    }
+                }
+            fichier << x_ik << " " << x_jk << " ";
+
+
+            }
+         test_clause++;
+         fichier << "0" << endl;
+        }
+
+
+    cout << "Facteur :: "<<facteur << endl;
+    fichier.close();
+
+}
+
+
+set<int> Algorithms::find_cover_minisat(char* corresp_tab,char * output_minisat){
+
+    //get file in tab
+    int size_tab;
+    string line;
+    ifstream tab_file(corresp_tab, ios::in);
+    while (getline(tab_file, line)){
+        size_tab++;
+    }
+    tab_file.close();
+    int * vertex_index= new int[size_tab];
+    ifstream tab_file2(corresp_tab, ios::in);
+    line.clear();
+    int index=0;
+    while (getline(tab_file2, line)){
+        vertex_index[index] = atoi(line.c_str());
+        index++;
+    }
+    tab_file2.close();
+    int facteur = vertex_index[size_tab-1];
+
+
+    set<int> cover;
+    string content;
+    string content_number;
+    char c = '-';
+    ifstream file(output_minisat, ios::in);
+    getline(file, content);
+
+    if (content == "UNSAT"){
+        cout << "NO MIN COVER FOR THIS SIZE" << endl;
+    }
+    else if(content == ""){
+        cout << "ERROR FILE" << endl;
+    }
+    else if(content == "SAT"){
+    getline(file,content_number);
+    bool cont = true;
+    int i =0;
+    while (cont){
+
+
+        if (content_number.at(i) == c){
+
+
+            i+=1;
+            while (content_number.at(i) == '0' || content_number.at(i) == '1'
+                   || content_number.at(i) == '2' || content_number.at(i) =='3'
+                        || content_number.at(i) == '4' || content_number.at(i) == '5'
+                        || content_number.at(i) == '6' || content_number.at(i) == '7'
+                        || content_number.at(i) == '8' || content_number.at(i) == '9'){
+
+                i+=1;
+            }
+            i++;
+        }
+        else{
+
+            int indice = atoi(&content_number.at(i));
+
+
+            i++;
+            while (content_number.at(i) == '0' || content_number.at(i) == '1'
+                   || content_number.at(i) == '2' || content_number.at(i) =='3'
+                        || content_number.at(i) == '4' || content_number.at(i) == '5'
+                        || content_number.at(i) == '6' || content_number.at(i) == '7'
+                        || content_number.at(i) == '8' || content_number.at(i) == '9'){
+                i++;
+            }
+            i++;
+
+            cover.insert((vertex_index[indice-1]/facteur)-1);
+
+        }
+
+        if (content_number.at(i) == '0'){
+
+            cont =false;
+     }
+    }
+}
+
+
+
+    file.close();
+
+    return cover;
+
+}
 
 
 

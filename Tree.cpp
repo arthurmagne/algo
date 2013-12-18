@@ -15,6 +15,8 @@ using std::ifstream;
 
 using namespace std;
 
+#define BUFFER_LENGTH 10000
+
 Tree::Tree()
 {
 }
@@ -194,22 +196,22 @@ Tree * Tree::generate_tree_from_file(char* filename){
 
     while (!fin.eof()){
 
-        char str[20];
-        fin.getline(str, 20);
+        char str[BUFFER_LENGTH];
+        fin.getline(str, BUFFER_LENGTH);
 
         if(loop++ == 0){
-            char* line_token[10] = {};
+            char* line_token[BUFFER_LENGTH] = {};
             line_token[0] = strtok(str, " :");
             nb_vertices = atoi(line_token[0]);
             for(int i = 0; i< nb_vertices; i++)
                 nodeList.push_back(new Node(i));
         }
         if(loop>1 && loop<nodeList.size() + 2){
-            char* line_token[10] = {};
+            char* line_token[BUFFER_LENGTH] = {};
             line_token[0] = strtok(str, " :");
             v.push_back(line_token[0]);
             if (line_token[0]){
-                for (int n = 1; n < 10; n++){
+                for (int n = 1; n < BUFFER_LENGTH; n++){
                     line_token[n] = strtok(0, " :");
                     if (!line_token[n])
                         break;

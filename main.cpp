@@ -8,9 +8,9 @@
 
 using namespace std;
 
+
 int main(int argc,char *argv[])
 {
-    /*
     if(argc < 2){
         cout << "not enough arguments, usage: [algorithm_name][file_path]" << endl;
         cout << "[algorithm_name][size_graph][probability]" << endl;
@@ -30,8 +30,8 @@ int main(int argc,char *argv[])
      if (argv[1] == std::string("generate_tree_from_file")){
          cout << endl << "Génération d'un arbre à partir d'un fichier contenant une liste d'adjacence' " << endl;
          cout << "La liste d'adjacences obtenue est la suivante: " << endl;
-         Tree * t = Utils::generate_graph_from_file(argv[2]);
-         Utils::display_tree(t);
+         //Tree * t = Utils::generate_graph_from_file(argv[2]);
+         //Utils::display_tree(t);
      }
 
 
@@ -51,6 +51,7 @@ int main(int argc,char *argv[])
         cout << endl << "On génère un graphe à " << graph_origin->get_number_of_vertexes() << " sommets." << endl;
         cout << "La liste d'adjacences obtenue est la suivante: " << endl;
         Utils::display_graph(graph_origin);
+
     }
 
     else if(argv[1] == std::string("generate_tree")){
@@ -96,8 +97,9 @@ int main(int argc,char *argv[])
         set<Node*> optimal_tree_cover = Algorithms::optimal_tree(tree->get_tree_copy());
         cout << endl << "La couverture est " << endl;
         for (set<Node*>::iterator it = optimal_tree_cover.begin() ; it != optimal_tree_cover.end(); ++it){
-            cout << (*it)->get_key() ;
+            cout << (*it)->get_key() << " " ;
         }
+        cout << endl << "La taille de la couverture est : " << endl << optimal_tree_cover.size();
         cout << endl << "Fin optimal tree" << endl;
         cout << endl;
     }
@@ -114,35 +116,8 @@ int main(int argc,char *argv[])
     else if(argv[1] == std::string("bi_part_algorithm")){
         std::string arg2 = argv[2];
         std::string arg3 = argv[3];
-        /*Graph * test = new Graph();
-           Vertex * v0 = new Vertex(0);
-           Vertex * v1 = new Vertex(1);
-           Vertex * v2 = new Vertex(2);
-           Vertex * v3 = new Vertex(3);
-           Vertex * v4 = new Vertex(4);
-           Vertex * v5 = new Vertex(5);
 
-           v0->add_neighbour(v1);
-           v0->add_neighbour(v3);
-           v0->add_neighbour(v5);
-
-           v1->add_neighbour(v0);
-           v1->add_neighbour(v2);
-           v1->add_neighbour(v4);
-
-           v2->add_neighbour(v1);
-           v3->add_neighbour(v0);
-           v4->add_neighbour(v1);
-           v5->add_neighbour(v0);
-
-           test->get_vertexes().push_back(v0);
-           test->get_vertexes().push_back(v1);
-           test->get_vertexes().push_back(v2);
-           test->get_vertexes().push_back(v3);
-           test->get_vertexes().push_back(v4);
-           test->get_vertexes().push_back(v5);
-           Utils::display_graph(test);*/
-        /*Graph * bipartite_graph = Graph::generate_bipartite_graph(atoi(arg2.c_str()), atof(arg3.c_str()));
+        Graph * bipartite_graph = Graph::generate_bipartite_graph(atoi(arg2.c_str()), atof(arg3.c_str()));
         Utils::display_graph(bipartite_graph);
         set<Vertex*> cover_biPart = Algorithms::bi_part_algorithm(bipartite_graph);
         cout << endl << "La couverture est " << endl;
@@ -150,7 +125,7 @@ int main(int argc,char *argv[])
             cout << (*it)->get_key() ;
         }
         cout << endl;
-    }*/
+    }
 
      /* perf tests */
     set<int> testSuite;
@@ -169,6 +144,67 @@ int main(int argc,char *argv[])
          std::cout << "for " << *it << "vertexes, it took " << end - start << "ticks, or " << ((float)end - start)/CLOCKS_PER_SEC << "s" << endl;
 
     }
+
+    else if(argv[1] == std::string("parametric")){
+         if(argc == 5){
+             std::string arg2 = argv[2];
+             std::string arg3 = argv[3];
+             std::string arg4 = argv[4];
+             Graph * para = Graph::generate_graph(atoi(arg2.c_str()), atof(arg3.c_str()));
+             Utils::display_graph(para);
+
+             set<int> cover = Algorithms::parametric_algorithm(para, atoi(arg4.c_str()));
+             for (set<int>::iterator it = cover.begin() ; it != cover.end(); ++it){
+                 cout << *it << " ";
+             }
+             cout << endl;
+
+         }
+         else if(argc == 4){
+             Graph * para = Graph::generate_graph_from_file(argv[2]);
+             std::string arg3 = argv[3];
+             Utils::display_graph(para);
+             set<int> cover = Algorithms::parametric_algorithm(para, atoi(arg3.c_str()));
+             for (set<int>::iterator it = cover.begin() ; it != cover.end(); ++it){
+                 cout << *it << " ";
+             }
+             cout << endl;
+         }
+     }
+
+
+     else if(argv[1] == std::string("reduction_sat")){
+
+            cout << "AVANT" << endl;
+            Graph * graph = Graph::generate_graph(10,0.5);
+            Utils::display_graph(graph);
+            Algorithms::reduction_SAT(graph,8);
+
+
+
+
+            cout << "REDUCTION" << endl;
+     }
+
+     else if(argv[1] == std::string("find_cover_minisat")){
+
+
+
+
+             set <int> cover = Algorithms::find_cover_minisat(argv[2],argv[3]);
+             cout << "La couverture est :" << endl;
+           for (set<int>::iterator it = cover.begin() ; it != cover.end(); ++it){
+           cout << (*it) << " - " ;
+           }
+           cout << endl;
+
+
+
+
+    }
+
+
+
 
 
 
