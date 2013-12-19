@@ -131,11 +131,7 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
         if(current->get_parent()!=NULL){
             current=current->get_parent();
             cover.insert(current);
-<<<<<<< HEAD
-            //cout << endl << "couverture:"<< current->get_key() << endl;
-=======
 
->>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
 
              //On supprime les aretes fils-père
              for (set<Node*>::iterator it = current->get_children().begin() ; it != current->get_children().end(); ++it){
@@ -160,13 +156,7 @@ set<Node*> Algorithms::optimal_tree(Tree *any_tree){
 
 // le cover est à dupliquer à chaque nouvel appel comme le graph
 set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> current_cover, int cpt, int k){
-<<<<<<< HEAD
-    if ((cpt == 0) && (k > any_graph->get_number_of_vertexes()))
-        k = any_graph->get_number_of_vertexes();
-    //cout << "la fonction est appelée avec cpt: " << cpt << "any_graph" << endl;
-    //Utils::display_graph(any_graph);
-=======
->>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
+
     bool has_edges = false;
     for (vector<Vertex*>::iterator it = any_graph->get_iterator_begin(); it != any_graph->get_iterator_end() ; ++it){
         if ((*it)->get_number_of_neighbours() != 0){
@@ -213,14 +203,10 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
         (*it)->neighbours.erase(max_degree_left);
     }
     // remove all edges from max_degree node
-<<<<<<< HEAD
-    max_degree_left->get_neighbours().clear();
-    //cout << "graph_left" << endl;
-    //Utils::display_graph(graph_left);
-=======
+
     max_degree_left->neighbours.clear();
 
->>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
+
     // launch this function
     set<int> result_left = parametric_algorithm_impl(graph_left, cover_left, ++cpt, k);
 
@@ -239,19 +225,13 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
             max_degree_right = (*it);
     }
     // remove the covered edges
-<<<<<<< HEAD
-    for (set<Vertex*>::iterator it = max_degree_right->get_neighbours().begin() ; it != max_degree_right->get_neighbours().end(); ++it){
-        (*it)->get_neighbours().erase(max_degree_right);
-    }
-    // remove all edges from max_degree node
-    max_degree_right->get_neighbours().clear();
-=======
+
     for (set<Vertex*>::iterator it = max_degree_left->neighbours.begin() ; it != max_degree_left->neighbours.end(); ++it){
         (*it)->neighbours.erase(max_degree_left);
     }
     // remove all edges from max_degree node
     max_degree_left->neighbours.clear();
->>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
+
 
     set<Vertex*>::iterator tmp;
 
@@ -274,15 +254,10 @@ set<int> Algorithms::parametric_algorithm_impl(Graph *any_graph, set<int> curren
             }
 
         }
-<<<<<<< HEAD
-        (vertex_tmp)->get_neighbours().clear();
 
-        //cout << "graph_right" << endl;
-        //Utils::display_graph(graph_right);
-=======
         (vertex_tmp)->neighbours.clear();
 
->>>>>>> 824b0237c98c6f50bde7397720e2183959c924c7
+
         current = tmp;
 
 
